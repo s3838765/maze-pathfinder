@@ -10,7 +10,7 @@ void readOneCard(Colour* colour, int* number);
 
 int main(void) {
    // TODO: Convert to use a Class
-   int colour = 0;
+   int colour = RED;
    int number = 0;
 
    Card* cards[NUMBER_CARDS_TO_READ];
@@ -49,7 +49,7 @@ int main(void) {
    return EXIT_SUCCESS;
 }
 
-void readOneCard(int* colour, int* number) {
+void readOneCard(Colour* colour, int* number) {
    std::cin >> *colour;
    std::cin >> *number;
 }
