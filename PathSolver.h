@@ -31,6 +31,9 @@ public:
     /*                                           */
     /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
     /*                                           */
+    
+    void printEnv(Env env, Node currentNode);
+    void printExploredEnv(Env env, NodeList closedList);
 
 private:
     /*                                           */

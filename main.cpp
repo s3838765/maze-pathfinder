@@ -1,3 +1,10 @@
+/**
+ * 1. Reads environment from standard input
+ * 2. Execute forward search algorithm
+ * 3. Gets the nodes explored in the forward search
+ * 4. Gets the full navigation path (milestone 3)
+ * 5. Outputs environment with path to standard output (milestone 3)
+ */
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -17,18 +24,17 @@ void readEnvStdin(Env env);
 
 // Print out a Environment to standard output with path.
 // To be implemented for Milestone 3
-void printEnvStdout(Env env, NodeList* solution);
-
+// void printEnvStdout(Env env, NodeList* solution);
 
 int main(int argc, char** argv){
     // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE
     // AS YOU WORK ON MILESTONE 2. YOU CAN UPDATE THEM YOURSELF
     // AS YOU GO ALONG.
     // COMMENT THESE OUT BEFORE YOU SUBMIT!!!
-    std::cout << "TESTING - COMMENT THE OUT TESTING BEFORE YOU SUBMIT!!!" << std::endl;
-    testNode();
-    testNodeList();
-    std::cout << "DONE TESTING" << std::endl << std::endl;
+    // std::cout << "TESTING - COMMENT THE OUT TESTING BEFORE YOU SUBMIT!!!" << std::endl;
+    // testNode();
+    // testNodeList();
+    // std::cout << "DONE TESTING" << std::endl << std::endl;
 
     // Load Environment 
     Env env;
@@ -39,23 +45,33 @@ int main(int argc, char** argv){
     PathSolver* pathSolver = new PathSolver();
     pathSolver->forwardSearch(env);
 
-    NodeList* exploredPositions = nullptr;
-    exploredPositions = pathSolver->getNodesExplored();
+    // NodeList* exploredPositions = nullptr;
+    // exploredPositions = pathSolver->getNodesExplored();
 
     // Get the path
     // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
-    NodeList* solution = pathSolver->getPath(env);
+    // NodeList* solution = pathSolver->getPath(env);
 
-    printEnvStdout(env, solution);
+    // printEnvStdout(env, solution);
 
     delete pathSolver;
-    delete exploredPositions;
-    delete solution;
+    // delete exploredPositions;
+    // delete solution;
 
 }
 
-void readEnvStdin(Env env){
+void readEnvStdin(Env env) {
     //TODO 
+    // x represents columns and y represents rows
+    for (int row = 0; row < ENV_DIM; ++row)
+    {
+        for (int col = 0; col < ENV_DIM; ++col)
+        {
+            // Store this position in list
+            std::cin >> env[row][col];
+        }
+    }
+
 }
 
 void printEnvStdout(Env env, NodeList* solution) {

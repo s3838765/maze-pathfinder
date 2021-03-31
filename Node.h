@@ -2,6 +2,7 @@
 #define COSC_ASSIGN_ONE_NODE
 
 #include "Types.h"
+#include <string>
 
 class Node{
 public:
@@ -29,6 +30,17 @@ public:
     /*                                           */
     /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
     /*                                           */
+    char getUpChar(Env env);
+    char getDownChar(Env env);
+    char getLeftChar(Env env);
+    char getRightChar(Env env);
+    std::string getNodeCoordinatesStr();
+    bool isEqual(Node node);
+    // void getReachableNodes(Env env, NodeList openList);
+    Node getUpNode(Env env);
+    Node getDownNode(Env env);
+    Node getLeftNode(Env env);
+    Node getRightNode(Env env);
 
 
 private:

@@ -30,7 +30,8 @@ public:
     /*                                           */
     /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
     /*                                           */
-    
+    bool containsNode(Node node);
+    std::string printLatestNode();
 
 
 private:
