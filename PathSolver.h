@@ -34,6 +34,7 @@ public:
     
     void printEnv(Env env, Node currentNode);
     void printExploredEnv(Env env, NodeList closedList);
+    bool isAnyReachableNodes(Env env, Node currentNode, NodeList closedList);
 
 private:
     /*                                           */

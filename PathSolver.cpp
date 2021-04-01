@@ -18,24 +18,6 @@ PathSolver::~PathSolver(){
 
 void PathSolver::forwardSearch(Env env){
     // TODO
-    /**
-     * Input E environment
-     * Input S start location
-     * Input G goal location
-     * Let P be a list of positions the robot can reach, with distances (initially S). Called the open list
-     * Let C be a list of positions that have been explored, with distances (initially empty). Called the closed list
-     * 
-     * Repeat (Do)
-     *  Select node p from open list P that has the smallest estimated distance to goal (and is not in C)
-     *  For every position (q) in the environment (E) that the robot can reach from p (current position)
-     *      Set distance_travelled of q to be one more than p
-     *      Add q to open list P if not already in it
-     *  End
-     *  Add p to closed list C
-     * (While) Until the robot reaches the goal (p==G), or no such position p can be found
-     */
-
-
     NodeList openList;
     NodeList closedList;
     Node* currentNode = nullptr; // nullptr
@@ -117,6 +99,7 @@ void PathSolver::forwardSearch(Env env){
 
         // Find node with smallest estimated distance (that isn't in the closed list NOT IMPLEMENTED)
         bool closestNodeInitialised = false;
+        bool isAReachableNode = false;
         for (int i = 0; i < openList.getLength(); ++i)
         {
             // std::cout << "ENTERED FOR LOOP" << std::endl;
@@ -125,24 +108,50 @@ void PathSolver::forwardSearch(Env env){
             // iterationNode not current node
             // iterationNode not in closed list
             // iterationNode < closestNode
+            // std::cout << "-----------------" << std::endl;
             // std::cout << "!iteration->isEqual " << (!iterationNode->isEqual(*currentNode)) << std::endl;
             // std::cout << "!closedList.contains iteration " << !closedList.containsNode(*iterationNode) << std::endl;
             // std::cout << "Iteration distance " << iterationNode->getEstimatedDist2Goal(goalNode) << std::endl;
             // std::cout << "Closest node distance " << closestNode->getEstimatedDist2Goal(goalNode) << std::endl;
+            // std::cout << "-----------------" << std::endl;
             
             // Give closestNode an initial value
-            if (!iterationNode->isEqual(*currentNode) && !closedList.containsNode(*iterationNode) && !closestNodeInitialised)
+            if (!closestNodeInitialised && !iterationNode->isEqual(*currentNode) && 
+                !closedList.containsNode(*iterationNode) /*&& 
+                isAnyReachableNodes(env, *currentNode, closedList)*/)
             {
                 std::cout << "INITIALISING CLOSEST NODE" << std::endl;
                 closestNode = iterationNode;
                 closestNodeInitialised = true;
             }
-            if (!iterationNode->isEqual(*currentNode) && !closedList.containsNode(*iterationNode) && 
-                iterationNode->getEstimatedDist2Goal(goalNode) < closestNode->getEstimatedDist2Goal(goalNode))
+            /** no possible moves
+             *  !canMoveUp - !canMoveDown - !canMoveLeft - !canMoveRight
+             *  isPossibleMove
+             *  (directionNode != SYMBOL_WALL) || directionNode not in closedList
+             *  
+             *  if there is a possible move
+             *     && isReachable
+             *  else if there are no possible moves
+             */
+            // Choose node in neither open or closed list, selecting the smallest estimated distance
+            if (!iterationNode->isEqual(*currentNode) && !closedList.containsNode(*iterationNode))
             {
-                std::cout << "CLOSEST NODE " << iterationNode->getNodeCoordinatesStr() << std::endl;
-                // delete closestNode;
-                closestNode = iterationNode;
+                std::cout << "THIS LINE IS BEING REACHED" << std::endl;
+                std::cout << isAnyReachableNodes(env, *currentNode, closedList) << std::endl;
+                std::cout << currentNode->canReach(*iterationNode, env) << std::endl;
+                if (isAnyReachableNodes(env, *currentNode, closedList) && currentNode->canReach(*iterationNode, env) && 
+                    iterationNode->getEstimatedDist2Goal(goalNode) < closestNode->getEstimatedDist2Goal(goalNode))
+                {
+                    std::cout << "CLOSEST NODE " << iterationNode->getNodeCoordinatesStr() << std::endl;
+                    // delete closestNode;
+                    closestNode = iterationNode;
+                    isAReachableNode = true;
+                }
+                else if (!isAReachableNode)
+                {
+                    std::cout << "NO POSSIBLE MOVES DETECTED, TELEPORTING" << std::endl;
+                    closestNode = iterationNode;
+                }
             }
         }
         
@@ -152,13 +161,13 @@ void PathSolver::forwardSearch(Env env){
             closedList.addElement(closestNode);
         }
 
-        printEnv(env, *currentNode);
         std::cout << "Current node is now set to " << closestNode->getNodeCoordinatesStr() << std::endl;
         closedList.addElement(currentNode);
         std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
         // delete currentNode;
         currentNode = closestNode;
         // *closestNode = tempNode;
+        printEnv(env, *currentNode);
     }
     while (!currentNode->isEqual(*goalNode) /* or no such positions can be found */);
 
@@ -176,6 +185,23 @@ void PathSolver::forwardSearch(Env env){
 
     std::cout << "Exiting pathfinder." << std::endl;
 
+}
+
+bool PathSolver::isAnyReachableNodes(Env env, Node currentNode, NodeList closedList)
+{
+    bool isAnyReachableNodes = false;
+    if ((currentNode.getUpChar(env) == SYMBOL_EMPTY && 
+        !closedList.containsNode(currentNode.getUpNode(env))) ||
+        (currentNode.getDownChar(env) == SYMBOL_EMPTY && 
+        !closedList.containsNode(currentNode.getDownNode(env))) ||
+        (currentNode.getLeftChar(env) == SYMBOL_EMPTY && 
+        !closedList.containsNode(currentNode.getLeftNode(env))) ||
+        (currentNode.getRightChar(env) == SYMBOL_EMPTY && 
+        !closedList.containsNode(currentNode.getRightNode(env))))
+    {
+        isAnyReachableNodes = true;
+    }
+    return isAnyReachableNodes;
 }
 
 void PathSolver::printEnv(Env env, Node currentNode)

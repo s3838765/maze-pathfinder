@@ -41,6 +41,7 @@ public:
     Node getDownNode(Env env);
     Node getLeftNode(Env env);
     Node getRightNode(Env env);
+    bool canReach(Node targetNode, Env env);
 
 
 private:
