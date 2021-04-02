@@ -110,15 +110,15 @@ Node Node::getRightNode(Env env)
     return Node(this->row, this->col+1, this->dist_traveled+1);
 }
 
-bool Node::canReach(Node targetNode, Env env)
-{
-    bool isReachable = false;
-    if (this->getUpNode(env).isEqual(targetNode) ||
-        this->getDownNode(env).isEqual(targetNode) ||
-        this->getLeftNode(env).isEqual(targetNode) ||
-        this->getRightNode(env).isEqual(targetNode))
-    {
-        isReachable = true;
-    }
-    return isReachable;
-}
+// bool Node::canReach(Node targetNode, Env env)
+// {
+//     bool isReachable = false;
+//     if (this->getUpNode(env).isEqual(targetNode) ||
+//         this->getDownNode(env).isEqual(targetNode) ||
+//         this->getLeftNode(env).isEqual(targetNode) ||
+//         this->getRightNode(env).isEqual(targetNode))
+//     {
+//         isReachable = true;
+//     }
+//     return isReachable;
+// }
