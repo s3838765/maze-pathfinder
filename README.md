@@ -4,7 +4,7 @@
 
 ### Edge Cases
 
-[**cross.env**](Tests/cross.env): Basic test to check if surrounding nodes are being added correctly and check that basic pathfinding is working. <br>[**diagonal-open-field.env**](Tests/diagonal-open-field.env): An open field to test the pathfinders ability to navigate diagonally.
+[**cross.env**](Tests/cross.env): Basic test to check if surrounding nodes are being added correctly and check that basic pathfinding is working. <br>[**diagonal-open-field.env**](Tests/diagonal-open-field.env): An open field to test the pathfinders ability to navigate diagonally. <br>
 [**diagonal-path-block.env**](Tests/diagonal-open-field.env): A maze created to test that the pathfinder will travel towards the goal and relocate if it becomes stuck. <br>
 [**F.env**](Tests/F.env): Basic test to see if the pathfinder will be tricked into taking a dead end turn. <br>
 [**one-way-square.env**](Tests/one-way-square.env): Basic test to ensure the pathfinder can navigate a narrow environment without many open nodes. <br>
