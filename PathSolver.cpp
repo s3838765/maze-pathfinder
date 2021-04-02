@@ -51,6 +51,7 @@ void PathSolver::forwardSearch(Env env){
 
     do 
     {
+        std::cout << "------------------------------------------" << std::endl;
         // Check up down left right for open spaces, add any possible moves to openList
         // UP
         if ((currentNode->getUpChar(env) == '.' && 
@@ -180,28 +181,31 @@ void PathSolver::forwardSearch(Env env){
             }
         }
         
-        std::cout << "Current node is now set to " << closestNode->getNodeCoordinatesStr() << std::endl;
-        if (!closedList.containsNode(*currentNode))
-        {
-            closedList.addElement(currentNode);
-        }
-        if (closestNode->isEqual(*goalNode))
-        {
-            std::cout << "Current node is the goal node!" << std::endl;
-            closedList.addElement(closestNode);
-        }
-        else if (openList.getLength() == closedList.getLength())
-        {
-            std::cout << "No possible moves found." << std::endl;
-        }
 
-        if (openList.getLength() != closedList.getLength())
+        closedList.addElement(currentNode);
+        std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
+
+        if (openList.getLength() != closedList.getLength() && !closestNode->isEqual(*goalNode))
         {
-            std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
+            std::cout << "Current node is now set to " << closestNode->getNodeCoordinatesStr() << std::endl;
             // delete currentNode;
             currentNode = closestNode;
             // *closestNode = tempNode;
             printEnv(env, *currentNode);
+        }
+        // If goal node is found
+        else if (closestNode->isEqual(*goalNode))
+        {
+            // Inform user, set it as the current node, add it to the closed list
+            std::cout << "Goal node has been found at " << goalNode->getNodeCoordinatesStr() << std::endl;
+            currentNode = closestNode;
+            closedList.addElement(currentNode);
+            std::cout << "Goal node added to closed list" << std::endl;
+        }
+        // No possible moves
+        else if (openList.getLength() == closedList.getLength())
+        {
+            std::cout << "No possible moves found." << std::endl;
         }
     }
     while (!currentNode->isEqual(*goalNode) && openList.getLength() != closedList.getLength());
@@ -221,6 +225,7 @@ void PathSolver::forwardSearch(Env env){
 
     std::cout << "Exiting pathfinder." << std::endl;
 
+    nodesExplored = &closedList;
 }
 
 bool PathSolver::isAnyReachableNodes(Env env, Node currentNode, NodeList closedList)

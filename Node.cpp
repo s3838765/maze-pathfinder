@@ -44,7 +44,7 @@ void Node::setDistanceTraveled(int dist_traveled)
 int Node::getEstimatedDist2Goal(Node* goal){
     // TODO
     int manhattanDistance = std::abs(this->col - goal->getCol()) + std::abs(this->row - goal->getRow());
-    int estimatedDistance = getDistanceTraveled() + manhattanDistance;
+    int estimatedDistance = dist_traveled + manhattanDistance;
     return estimatedDistance;
 }
     
@@ -85,7 +85,6 @@ bool Node::isEqual(Node node)
 {
     return this->row == node.getRow() && 
            this->col == node.getCol(); 
-        //   && this->dist_traveled == node.getDistanceTraveled();
 }
 
 Node Node::getUpNode(Env env)
