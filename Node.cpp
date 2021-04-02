@@ -81,12 +81,19 @@ std::string Node::getNodeCoordinatesStr()
     return nodeCoordinates;
 }
 
-bool Node::isEqual(Node node)
+// bool Node::isEqual(Node node)
+// {
+//     return this->row == node.getRow() && 
+//            this->col == node.getCol(); 
+// }
+
+bool Node::isEqual(Node* node)
 {
-    return this->row == node.getRow() && 
-           this->col == node.getCol(); 
+    return this->row == node->getRow() && 
+           this->col == node->getCol(); 
 }
 
+// TODO: Revert to normal node
 Node Node::getUpNode(Env env)
 {
     return Node(this->row-1, this->col, this->dist_traveled+1);

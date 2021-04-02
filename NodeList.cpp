@@ -57,13 +57,27 @@ bool NodeList::containsNode(Node node)
     // Search through every element of current NodeList
     for (int i = 0; i < this->length; ++i)
     {
-        if (this->getNode(i)->isEqual(node))
+        if (this->getNode(i)->isEqual(&node))
         {
             isContained = true;
         }
     }
     return isContained;
 }
+
+// bool NodeList::containsNode(Node* node)
+// {
+//     bool isContained = false;
+//     // Search through every element of current NodeList
+//     for (int i = 0; i < this->length; ++i)
+//     {
+//         if (this->getNode(i)->isEqual(node))
+//         {
+//             isContained = true;
+//         }
+//     }
+//     return isContained;
+// }
 
 std::string NodeList::printLatestNode()
 {

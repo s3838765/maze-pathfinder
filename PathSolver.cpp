@@ -20,12 +20,12 @@ PathSolver::~PathSolver(){
 
 void PathSolver::forwardSearch(Env env){
     // TODO
-    NodeList openList;
-    NodeList closedList;
+    NodeList* openList = new NodeList();
+    NodeList* closedList = new NodeList();
     Node* currentNode = nullptr;
     Node* goalNode = nullptr;
     // Node closestNode = tempNode;
-    Node* closestNode = new Node(0,0,100);
+    Node* closestNode = nullptr;
 
     // Scan environment and find start and goal nodes
     for (int row = 0; row < ENV_DIM; ++row)
@@ -34,9 +34,11 @@ void PathSolver::forwardSearch(Env env){
         {
             if (env[row][col] == SYMBOL_START)
             {
-                openList.addElement(new Node(row, col, 0));
+                Node* tempNode = new Node(row, col, 0);
+                openList->addElement(tempNode);
+                delete tempNode;
                 delete currentNode;
-                currentNode = openList.getNode(0);
+                currentNode = openList->getNode(0);
             }
             else if (env[row][col] == SYMBOL_GOAL)
             {
@@ -56,60 +58,75 @@ void PathSolver::forwardSearch(Env env){
         // Check up down left right for open spaces, add any possible moves to openList
         // UP
         if ((currentNode->getUpChar(env) == SYMBOL_EMPTY && 
-            !openList.containsNode(currentNode->getUpNode(env)) &&
-            !closedList.containsNode(currentNode->getUpNode(env))) ||
-            currentNode->getUpNode(env).isEqual(*goalNode))
+            !openList->containsNode(currentNode->getUpNode(env)) &&
+            !closedList->containsNode(currentNode->getUpNode(env))) ||
+            currentNode->getUpNode(env).isEqual(goalNode))
         {
-            openList.addElement(new Node(currentNode->getUpNode(env)));
+            // openList.addElement(new Node(currentNode->getUpNode(env)));
+            Node* tempNode = new Node(currentNode->getRow()-1, currentNode->getCol(), currentNode->getDistanceTraveled()+1);
+            openList->addElement(tempNode);
+            delete tempNode;
             // openList.addElement(new Node(currentNode->getRow()-1, currentNode->getCol(), currentNode->getDistanceTraveled()+1));
-            std::cout << "Up element " << openList.printLatestNode() << " added to openList" << std::endl;
+            std::cout << "Up element " << openList->printLatestNode() << " added to openList" << std::endl;
         }
 
         // DOWN
         if ((currentNode->getDownChar(env) == SYMBOL_EMPTY && 
-            !openList.containsNode(currentNode->getDownNode(env)) &&
-            !closedList.containsNode(currentNode->getDownNode(env))) ||
-            currentNode->getDownNode(env).isEqual(*goalNode))
+            !openList->containsNode(currentNode->getDownNode(env)) &&
+            !closedList->containsNode(currentNode->getDownNode(env))) ||
+            currentNode->getDownNode(env).isEqual(goalNode))
 
         {
-            openList.addElement(new Node(currentNode->getDownNode(env)));
+            // openList.addElement(new Node(currentNode->getDownNode(env)));
+            Node* tempNode = new Node(currentNode->getRow()+1, currentNode->getCol(), currentNode->getDistanceTraveled()+1);
+            openList->addElement(tempNode);
+            delete tempNode;
             // openList.addElement(new Node(currentNode->getRow()+1, currentNode->getCol(), currentNode->getDistanceTraveled()+1));
-            std::cout << "Down element " << openList.printLatestNode() << " added to openList" << std::endl;
+            std::cout << "Down element " << openList->printLatestNode() << " added to openList" << std::endl;
         }
 
         // LEFT
         if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY && 
-            !openList.containsNode(currentNode->getLeftNode(env)) &&
-            !closedList.containsNode(currentNode->getLeftNode(env))) ||
-            currentNode->getLeftNode(env).isEqual(*goalNode))
+            !openList->containsNode(currentNode->getLeftNode(env)) &&
+            !closedList->containsNode(currentNode->getLeftNode(env))) ||
+            currentNode->getLeftNode(env).isEqual(goalNode))
 
         {
-            openList.addElement(new Node(currentNode->getLeftNode(env)));
+            // openList.addElement(new Node(currentNode->getLeftNode(env)));
+            Node* tempNode = new Node(currentNode->getRow(), currentNode->getCol()-1, currentNode->getDistanceTraveled()+1);
+            openList->addElement(tempNode);
+            delete tempNode;
             // openList.addElement(new Node(currentNode->getRow(), currentNode->getCol()-1, currentNode->getDistanceTraveled()+1));
-            std::cout << "Left element " << openList.printLatestNode() << " added to openList" << std::endl;
+            std::cout << "Left element " << openList->printLatestNode() << " added to openList" << std::endl;
         }
 
         // RIGHT
         if ((currentNode->getRightChar(env) == SYMBOL_EMPTY && 
-            !openList.containsNode(currentNode->getRightNode(env)) &&
-            !closedList.containsNode(currentNode->getRightNode(env))) ||
-            currentNode->getRightNode(env).isEqual(*goalNode))
+            !openList->containsNode(currentNode->getRightNode(env)) &&
+            !closedList->containsNode(currentNode->getRightNode(env))) ||
+            currentNode->getRightNode(env).isEqual(goalNode)) //?????
 
         {
-            openList.addElement(new Node(currentNode->getRightNode(env)));
-            // openList.addElement(new Node(currentNode->getRow(), currentNode->getCol()+1, currentNode->getDistanceTraveled()+1));
-            std::cout << "Right element " << openList.printLatestNode() << " added to openList" << std::endl;
+            // openList.addElement(new Node(currentNode->getRightNode(env)));
+            // openList->addElement(currentNode->getRightNode(env));
+            // Node* tempNode = &(currentNode->getRightNode(env));
+            // openList->addElement(currentNode);
+            Node* tempNode = new Node(currentNode->getRow(), currentNode->getCol()+1, currentNode->getDistanceTraveled()+1);
+            openList->addElement(tempNode);
+            delete tempNode;
+            tempNode = nullptr;
+            std::cout << "Right element " << openList->printLatestNode() << " added to openList" << std::endl;
         }
 
         // Find node with smallest estimated distance (that isn't in the closed list NOT IMPLEMENTED)
         bool closestNodeInitialised = false;
         // bool isAReachableNode = false;
-        for (int i = 0; i < openList.getLength(); ++i)
+        for (int i = 0; i < openList->getLength(); ++i)
         {
-            Node* iterationNode = openList.getNode(i);
+            Node* iterationNode = openList->getNode(i);
 
             // If node is valid to be closest (not current node and not in closed list)
-            if (!iterationNode->isEqual(*currentNode) && !closedList.containsNode(*iterationNode))
+            if (!iterationNode->isEqual(currentNode) && !closedList->containsNode(*iterationNode))
             {
                 if (!closestNodeInitialised)
                 {
@@ -131,10 +148,10 @@ void PathSolver::forwardSearch(Env env){
 
         std::cout << "Distance travelled: " << currentNode->getDistanceTraveled() << std::endl;
         std::cout << "Estimated Distance: " << currentNode->getEstimatedDist2Goal(goalNode) << std::endl;
-        closedList.addElement(currentNode);
+        closedList->addElement(currentNode);
         std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
 
-        if (openList.getLength() != closedList.getLength() && !closestNode->isEqual(*goalNode))
+        if (openList->getLength() != closedList->getLength() && !closestNode->isEqual(goalNode))
         {
             std::cout << "Current node is now set to " << closestNode->getNodeCoordinatesStr() << std::endl;
             // delete currentNode;
@@ -142,28 +159,28 @@ void PathSolver::forwardSearch(Env env){
             printEnv(env, *currentNode);
         }
         // If goal node is found
-        else if (closestNode->isEqual(*goalNode))
+        else if (closestNode->isEqual(goalNode))
         {
             // Inform user, set it as the current node, add it to the closed list
             std::cout << "Goal node has been found at " << goalNode->getNodeCoordinatesStr() << std::endl;
             currentNode = closestNode;
-            closedList.addElement(currentNode);
+            closedList->addElement(currentNode);
             std::cout << "Goal node added to closed list" << std::endl;
         }
         // No possible moves
-        else if (openList.getLength() == closedList.getLength())
+        else if (openList->getLength() == closedList->getLength())
         {
             std::cout << "No possible moves found." << std::endl;
         }
     // usleep(50000);
     }
-    while (!currentNode->isEqual(*goalNode) && openList.getLength() != closedList.getLength());
+    while (!currentNode->isEqual(goalNode) && openList->getLength() != closedList->getLength());
 
     std::cout << std::endl;
-    printExploredEnv(env, closedList);
-    // delete &openList;
+    // printExploredEnv(env, closedList);
+    delete openList;
     // nodesExplored = new NodeList(closedList); // For milestone 3
-    // delete &closedList;
+    delete closedList;
     // delete closestNode; // Don't need? (Doesn't affect memory)
     delete goalNode;
 
@@ -171,26 +188,26 @@ void PathSolver::forwardSearch(Env env){
 
 }
 
-bool PathSolver::isAnyReachableNodes(Env env, Node currentNode, NodeList closedList)
-{
-    bool isAnyReachableNodes = false;
-    if ((currentNode.getUpChar(env) == SYMBOL_EMPTY && 
-        !closedList.containsNode(currentNode.getUpNode(env))) ||
-        (currentNode.getDownChar(env) == SYMBOL_EMPTY && 
-        !closedList.containsNode(currentNode.getDownNode(env))) ||
-        (currentNode.getLeftChar(env) == SYMBOL_EMPTY && 
-        !closedList.containsNode(currentNode.getLeftNode(env))) ||
-        (currentNode.getRightChar(env) == SYMBOL_EMPTY && 
-        !closedList.containsNode(currentNode.getRightNode(env))) ||
-        currentNode.getUpChar(env) == SYMBOL_GOAL ||
-        currentNode.getDownChar(env) == SYMBOL_GOAL ||
-        currentNode.getLeftChar(env) == SYMBOL_GOAL ||
-        currentNode.getRightChar(env) == SYMBOL_GOAL)
-    {
-        isAnyReachableNodes = true;
-    }
-    return isAnyReachableNodes;
-}
+// bool PathSolver::isAnyReachableNodes(Env env, Node currentNode, NodeList closedList)
+// {
+//     bool isAnyReachableNodes = false;
+//     if ((currentNode.getUpChar(env) == SYMBOL_EMPTY && 
+//         !closedList.containsNode(currentNode.getUpNode(env))) ||
+//         (currentNode.getDownChar(env) == SYMBOL_EMPTY && 
+//         !closedList.containsNode(currentNode.getDownNode(env))) ||
+//         (currentNode.getLeftChar(env) == SYMBOL_EMPTY && 
+//         !closedList.containsNode(currentNode.getLeftNode(env))) ||
+//         (currentNode.getRightChar(env) == SYMBOL_EMPTY && 
+//         !closedList.containsNode(currentNode.getRightNode(env))) ||
+//         currentNode.getUpChar(env) == SYMBOL_GOAL ||
+//         currentNode.getDownChar(env) == SYMBOL_GOAL ||
+//         currentNode.getLeftChar(env) == SYMBOL_GOAL ||
+//         currentNode.getRightChar(env) == SYMBOL_GOAL)
+//     {
+//         isAnyReachableNodes = true;
+//     }
+//     return isAnyReachableNodes;
+// }
 
 void PathSolver::printEnv(Env env, Node currentNode)
 {
@@ -212,26 +229,26 @@ void PathSolver::printEnv(Env env, Node currentNode)
     }
 }
 
-void PathSolver::printExploredEnv(Env env, NodeList closedList)
-{
-    for (int row = 0; row < ENV_DIM; ++row)
-    {
-        for (int col = 0; col < ENV_DIM; ++col)
-        {
-            if (closedList.containsNode(Node(row, col, 0)))
-            {
-                std::cout << "x";
-            }
-            else
-            {
-                std::cout << env[row][col];
-            }
-        }
-        std::cout << " " << row;
-        std::cout << std::endl;
-    }
+// void PathSolver::printExploredEnv(Env env, NodeList closedList)
+// {
+//     for (int row = 0; row < ENV_DIM; ++row)
+//     {
+//         for (int col = 0; col < ENV_DIM; ++col)
+//         {
+//             if (closedList.containsNode(Node(row, col, 0)))
+//             {
+//                 std::cout << "x";
+//             }
+//             else
+//             {
+//                 std::cout << env[row][col];
+//             }
+//         }
+//         std::cout << " " << row;
+//         std::cout << std::endl;
+//     }
 
-}
+// }
 
 // NodeList* PathSolver::getNodesExplored(){
 //     //TODO

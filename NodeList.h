@@ -31,6 +31,7 @@ public:
     /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
     /*                                           */
     bool containsNode(Node node);
+    // bool containsNode(Node* node);
     std::string printLatestNode();
 
 

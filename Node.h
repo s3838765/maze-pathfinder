@@ -35,13 +35,14 @@ public:
     char getLeftChar(Env env);
     char getRightChar(Env env);
     std::string getNodeCoordinatesStr();
-    bool isEqual(Node node);
+    // bool isEqual(Node node);
+    bool isEqual(Node* node);
     // void getReachableNodes(Env env, NodeList openList);
     Node getUpNode(Env env);
     Node getDownNode(Env env);
     Node getLeftNode(Env env);
     Node getRightNode(Env env);
-    bool canReach(Node targetNode, Env env);
+    // bool canReach(Node targetNode, Env env);
 
 
 private:
