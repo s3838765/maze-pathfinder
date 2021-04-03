@@ -65,6 +65,46 @@ bool NodeList::containsNode(Node node)
    return isContained;
 }
 
+// Get index of particular node in nodelist
+Node* NodeList::getNodeAtIndex(Node node)
+{
+   Node* returnNode = nullptr;
+   for (int i = 0; i < this->length; ++i)
+   {
+      if (this->getNode(i)->isEqual(&node))
+      {
+         returnNode = this->getNode(i);
+      }
+   }
+   return returnNode;
+}
+
+int NodeList::getNodeIndex(Node node)
+{
+   int nodeIndex = 0;
+   for (int i = 0; i < this->length; ++i)
+   {
+      if (this->getNode(i)->isEqual(&node))
+      {
+         nodeIndex = i;
+      }
+   }
+   return nodeIndex;
+}
+
+Node* NodeList::getNextNode(int nodeIndex)
+{
+   Node* nextNode = nullptr;
+   if (nodeIndex < this->getLength()-1)
+   {
+      nextNode = this->getNode(nodeIndex+1);
+   }
+   else
+   {
+   }
+   return nextNode;
+}
+
 // bool NodeList::containsNode(Node* node)
 // {
 //    bool isContained = false;

@@ -32,7 +32,11 @@ public:
    /*                                           */
    bool containsNode(Node node);
    // bool containsNode(Node* node);
+   Node* getNodeAtIndex(Node node);
+   int getNodeIndex(Node node);
    std::string printLatestNode();
+   Node* getNextNode(int nodeIndex);
+
 
 
 private:

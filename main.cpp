@@ -24,7 +24,7 @@ void readEnvStdin(Env env);
 
 // Print out a Environment to standard output with path.
 // To be implemented for Milestone 3
-// void printEnvStdout(Env env, NodeList* solution);
+void printEnvStdout(Env env, NodeList* solution);
 
 int main(int argc, char** argv){
    // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE
@@ -50,13 +50,13 @@ int main(int argc, char** argv){
 
    // Get the path
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
-   // NodeList* solution = pathSolver->getPath(env);
+   NodeList* solution = pathSolver->getPath(env);
 
-   // printEnvStdout(env, solution);
+   printEnvStdout(env, solution);
 
    delete pathSolver;
    delete exploredPositions;
-   // delete solution;
+   delete solution;
 }
 
 void readEnvStdin(Env env) {
@@ -74,6 +74,62 @@ void readEnvStdin(Env env) {
 
 void printEnvStdout(Env env, NodeList* solution) {
    //TODO
+   for (int row = 0; row < ENV_DIM; ++row)
+   {
+      for (int col = 0; col < ENV_DIM; ++col)
+      {
+         // If the node currently being scanned is within the solution
+         Node scanningNode = Node(row, col, 0);
+         bool solutionNode = false;
+         if (solution->getLength() > 0 &&
+             solution->containsNode(scanningNode) && env[row][col] != SYMBOL_GOAL)
+         {
+            // check direction of next node and print direction
+            // and next element is x direction
+            // If the solution contains the node above the currently scanned node
+            // and the next node in solution is the node above
+            Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
+            Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
+            if (solution->containsNode(solutionScanningNode->getUpNode(env))
+                && solutionScanningNode->getUpNode(env).isEqual(nextNode))
+            {
+               std::cout << "^";
+               solutionNode = true;
+            }
+            else if (solution->containsNode(solutionScanningNode->getDownNode(env))
+                     && solutionScanningNode->getDownNode(env).isEqual(nextNode))
+
+            {
+               std::cout << "v";
+               solutionNode = true;
+            }
+            else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
+                     && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
+            {
+               std::cout << "<";
+               solutionNode = true;
+            }
+            else if (solution->containsNode(solutionScanningNode->getRightNode(env))
+                     && solutionScanningNode->getRightNode(env).isEqual(nextNode))
+            {
+               std::cout << ">";
+               solutionNode = true;
+            }
+            else
+            {
+
+            }
+         }
+         if (solutionNode != true)
+         {
+            std::cout << env[row][col];
+         }
+      }
+      if (row != ENV_DIM-1)
+      {
+         std::cout << std::endl;
+      }
+   }
 }
 
 void testNode() {

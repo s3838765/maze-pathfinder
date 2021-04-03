@@ -93,7 +93,6 @@ bool Node::isEqual(Node* node)
           this->col == node->getCol(); 
 }
 
-// TODO: Revert to normal node
 Node Node::getUpNode(Env env)
 {
    return Node(this->row-1, this->col, this->dist_traveled+1);
@@ -114,15 +113,15 @@ Node Node::getRightNode(Env env)
    return Node(this->row, this->col+1, this->dist_traveled+1);
 }
 
-// bool Node::canReach(Node targetNode, Env env)
-// {
-//    bool isReachable = false;
-//    if (this->getUpNode(env).isEqual(targetNode) ||
-//       this->getDownNode(env).isEqual(targetNode) ||
-//       this->getLeftNode(env).isEqual(targetNode) ||
-//       this->getRightNode(env).isEqual(targetNode))
-//    {
-//       isReachable = true;
-//    }
-//    return isReachable;
-// }
+bool Node::canReach(Node* targetNode, Env env)
+{
+   bool canReach = false;
+   if (this->getUpNode(env).isEqual(targetNode) ||
+       this->getDownNode(env).isEqual(targetNode) ||
+       this->getLeftNode(env).isEqual(targetNode) ||
+       this->getRightNode(env).isEqual(targetNode))
+   {
+      canReach = true;
+   }
+   return canReach;
+}
