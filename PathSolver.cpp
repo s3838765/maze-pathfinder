@@ -15,13 +15,15 @@ PathSolver::PathSolver() {
 PathSolver::~PathSolver() {
    // TODO
    // Deconstruct nodesExplored node list?
-   // delete this->nodesExplored;
+   delete nodesExplored;
 }
 
 void PathSolver::forwardSearch(Env env) {
    // TODO
-   NodeList* openList = new NodeList();
    NodeList* closedList = new NodeList();
+   NodeList* openList = new NodeList();
+   // NodeList* openList = nullptr;
+   // NodeList* closedList = nullptr;
    Node* currentNode = nullptr;
    Node* goalNode = nullptr;
    Node* closestNode = nullptr;
@@ -178,7 +180,7 @@ void PathSolver::forwardSearch(Env env) {
    std::cout << std::endl;
    // printExploredEnv(env, closedList);
    delete openList;
-   // nodesExplored = new NodeList(closedList); // For milestone 3
+   nodesExplored = new NodeList(*closedList); // For milestone 3
    delete closedList;
    // delete closestNode; // Don't need? (Doesn't affect memory)
    delete goalNode;
@@ -186,11 +188,10 @@ void PathSolver::forwardSearch(Env env) {
    std::cout << "Exiting pathfinder." << std::endl;
 }
 
-
-
-// NodeList* PathSolver::getNodesExplored(){
-//    //TODO
-// }
+NodeList* PathSolver::getNodesExplored(){
+   //TODO
+   return new NodeList(*nodesExplored);
+}
 
 // NodeList* PathSolver::getPath(Env env){
 //    // TODO

@@ -22,6 +22,7 @@ NodeList::~NodeList(){
 
 NodeList::NodeList(NodeList& other){
    // TODO
+   this->length = other.getLength();
    for (int i = 0; i < other.getLength(); ++i)
    {
       // this->nodes[i] = other.nodes[i];
@@ -29,7 +30,6 @@ NodeList::NodeList(NodeList& other){
                                  other.getNode(i)->getCol(), 
                                  other.getNode(i)->getDistanceTraveled());
    }
-   this->length = other.getLength();
 }
 
 int NodeList::getLength(){
