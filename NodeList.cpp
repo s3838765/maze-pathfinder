@@ -6,12 +6,19 @@
 #include "NodeList.h"
 #include <iostream>
 
-NodeList::NodeList(int rows, int cols){
+
+NodeList::NodeList(){
    // TODO
 
    this->length = 0;
-   this->rows = rows;
-   this->cols = cols;
+   // int MAX_DIM = (envRows-2)*(envCols-2);
+   this->nodes = new Node*[length];
+}
+
+// Overloaded
+NodeList::NodeList(int rows, int cols)
+{
+   this->length = 0;
    int MAX_DIM = (rows-2)*(cols-2);
    this->nodes = new Node*[MAX_DIM];
 }
@@ -29,16 +36,28 @@ NodeList::~NodeList(){
 NodeList::NodeList(NodeList& other){
    // TODO
    this->length = other.getLength();
-   this->rows = other.getRows();
-   this->cols = other.getCols();
-   int MAX_DIM = (rows-2)*(cols-2);
+   nodes = new Node*[length];
+   for (int i = 0; i < other.getLength(); ++i)
+   {
+      // this->nodes[i] = other.nodes[i];
+      this->nodes[i] = new Node(other.getNode(i)->getRow(), 
+                                other.getNode(i)->getCol(), 
+                                other.getNode(i)->getDistanceTraveled());
+   }
+}
+
+// Overloaded
+NodeList::NodeList(NodeList& other, int rows, int cols){
+   // TODO
+   this->length = other.getLength();
+   int MAX_DIM = (cols-2)*(cols-2);
    nodes = new Node*[MAX_DIM];
    for (int i = 0; i < other.getLength(); ++i)
    {
       // this->nodes[i] = other.nodes[i];
       this->nodes[i] = new Node(other.getNode(i)->getRow(), 
-                                 other.getNode(i)->getCol(), 
-                                 other.getNode(i)->getDistanceTraveled());
+                                other.getNode(i)->getCol(), 
+                                other.getNode(i)->getDistanceTraveled());
    }
 }
 
@@ -47,17 +66,10 @@ int NodeList::getLength(){
    return this->length;
 }
 
-int NodeList::getRows(){
-   return this->rows;
-}
-
-int NodeList::getCols(){
-   return this->cols;
-}
-
 void NodeList::addElement(Node* newPos){
    // TODO
-   // nodes[length] = newPos;
+   // delete[] this->nodes;
+   // this->nodes = new NodeList*()
    nodes[length] = new Node(newPos->getRow(),
                             newPos->getCol(),
                             newPos->getDistanceTraveled());
@@ -117,25 +129,8 @@ Node* NodeList::getNextNode(int nodeIndex)
    {
       nextNode = this->getNode(nodeIndex+1);
    }
-   else
-   {
-   }
    return nextNode;
 }
-
-// bool NodeList::containsNode(Node* node)
-// {
-//    bool isContained = false;
-//    // Search through every element of current NodeList
-//    for (int i = 0; i < this->length; ++i)
-//    {
-//       if (this->getNode(i)->isEqual(node))
-//       {
-//          isContained = true;
-//       }
-//    }
-//    return isContained;
-// }
 
 std::string NodeList::printLatestNode()
 {

@@ -17,7 +17,7 @@ public:
 
    // Execute forward search algorithm
    // To be implemented for Milestone 2
-   void forwardSearch(Env env, int rows, int cols);
+   void forwardSearch(Env env);
 
    // Get a DEEP COPY of the explored NodeList in forward search
    // To be implemented for Milestone 2
@@ -26,15 +26,14 @@ public:
    // Execute backtracking and Get a DEEP COPY of the path the 
    // robot should travel
    // To be implemented for Milestone 3
-   NodeList* getPath(Env env, int rows, int cols);
+   NodeList* getPath(Env env);
 
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
-   
-   // void printEnv(Env env, Node currentNode);
-   // void printExploredEnv(Env env, NodeList closedList);
    bool isAnyReachableNodes(Env env, Node currentNode, NodeList closedList);
+   void forwardSearch(Env env, int rows, int cols);
+   NodeList* getPath(Env env, int rows, int cols);
 
 private:
    /*                                           */

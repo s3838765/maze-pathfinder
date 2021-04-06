@@ -11,7 +11,7 @@ public:
    /*                                           */
 
    // Constructor/Desctructor
-   NodeList(int rows, int cols);
+   NodeList();
    ~NodeList();
 
    // Copy Constructor
@@ -36,8 +36,8 @@ public:
    int getNodeIndex(Node node);
    std::string printLatestNode();
    Node* getNextNode(int nodeIndex);
-   int getRows();
-   int getCols();
+   NodeList(int rows, int cols);
+   NodeList(NodeList& other, int rows, int cols);
 
 
 
@@ -52,8 +52,6 @@ private:
 
    // Number of nodes currently in the NodeList
    int length;
-   int rows;
-   int cols;
 
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */

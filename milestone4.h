@@ -1,3 +1,12 @@
+#ifndef MILESTONE4_H
+#define MILESTONE4_H
+
+// int* envCols = new int(0);
+// int* envRows = new int(0);
+// int envCols;
+// int envRows;
+
+
 /*
  * This function is to help you dynamically allocate
  *  memory for a generic 2D Environemnt.
@@ -30,3 +39,4 @@
 //    return;
 // }
 
+#endif //MILESTONE4_H

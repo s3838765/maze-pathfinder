@@ -14,6 +14,8 @@
 #include "Node.h"
 #include "NodeList.h"
 #include "PathSolver.h"
+// #include "milestone4.h"
+// #include "Environment.h"
 
 // Helper test functions
 void testNode();
@@ -27,12 +29,15 @@ Env readCustomEnv();
 int getEnvRows(Env env);
 int getEnvCols(Env env);
 
+// Print blank environment
+void printEnv(Env env);
+
 // Print out a Environment to standard output with path.
 // To be implemented for Milestone 3
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols);
 
-int* mainCols = new int(0);
-int* mainRows = new int(0);
+int* envCols = new int(0);
+int* envRows = new int(0);
 
 int main(int argc, char** argv){
    // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE
@@ -46,33 +51,32 @@ int main(int argc, char** argv){
 
    // Load Environment 
    Env env = readCustomEnv();
-   // readEnvStdin(env);
-   // readCustomEnv();
 
    // Solve using forwardSearch
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
    PathSolver* pathSolver = new PathSolver();
-   pathSolver->forwardSearch(env, *mainRows, *mainCols);
+   pathSolver->forwardSearch(env, *envRows, *envCols);
+   // pathSolver->forwardSearch(env);
 
    NodeList* exploredPositions = nullptr;
    exploredPositions = pathSolver->getNodesExplored();
 
    // Get the path
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
-   NodeList* solution = pathSolver->getPath(env, *mainRows, *mainCols);
+   NodeList* solution = pathSolver->getPath(env, *envRows, *envCols);
 
-   printEnvStdout(env, solution, *mainRows, *mainCols);
+   printEnvStdout(env, solution, *envRows, *envCols);
 
    delete pathSolver;
    delete exploredPositions;
    delete solution;
-   for (int i = 0; i < *mainRows; ++i)
+   for (int i = 0; i < *envRows; ++i)
    {
       delete[] env[i];
    }
    delete[] env;
-   delete mainRows;
-   delete mainCols;
+   delete envRows;
+   delete envCols;
 }
 
 void readEnvStdin(Env env) {
@@ -87,13 +91,12 @@ void readEnvStdin(Env env) {
       }
    }
 }
+
 Env readCustomEnv()
 {
    Env env = nullptr;
-   int* cols = mainCols;
-   int* rows = mainRows;
-   // int cols = 0;
-   // int rows = 0;
+   int* cols = envCols;
+   int* rows = envRows;
    std::string mazeStr;
 
    bool colsDefined = false;
@@ -103,12 +106,13 @@ Env readCustomEnv()
       mazeStr += input;
       if (!colsDefined)
       {
+         // *cols = mazeStr.length();
          *cols = mazeStr.length();
          colsDefined = true;
       }
       (*rows)++;
    } while (std::cin.peek() != EOF);
-   std::cout << "EOF Reached. Dimensions of maze were " << *rows << "x" << *cols << std::endl;
+   // std::cout << "EOF Reached. Dimensions of maze were " << *rows << "x" << *cols << std::endl;
 
    env = new char*[*rows];
    for (int row = 0; row < *rows; ++row)
@@ -116,88 +120,91 @@ Env readCustomEnv()
       env[row] = new char[*cols];
       for (int col = 0; col < *cols; ++col)
       {
-         // std::cout << mazeStr[row*(*cols)+col];
+         std::cout << mazeStr[row*(*cols)+col];
          env[row][col] = mazeStr[row*(*cols)+col];
       }
-      // std::cout << std::endl;
+      std::cout << std::endl;
    }
    
    return env;
 }
 
-int getEnvCols(Env env)
-{
-   int cols = 0;
-   while (std::cin.get() != '\n')
-   {
-      cols++;
-   }
-   return cols;
-}
-
-// int getEnvRows(Env env)
-// {
-//    int rows = 0;
-
-// }
-
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
    //TODO
-   for (int row = 0; row < rows; ++row)
+   // if last node is not goal
+   Node* finalNode = solution->getNode(solution->getLength()-1);
+   if (env[finalNode->getRow()][finalNode->getCol()] == SYMBOL_GOAL)
    {
-      for (int col = 0; col < cols; ++col)
+      for (int row = 0; row < rows; ++row)
       {
-         // If the node currently being scanned is within the solution
-         Node scanningNode = Node(row, col, 0);
-         bool solutionNode = false;
-         if (solution->getLength() > 0 &&
-             solution->containsNode(scanningNode) && env[row][col] != SYMBOL_GOAL)
+         for (int col = 0; col < cols; ++col)
          {
-            // check direction of next node and print direction
-            // and next element is x direction
-            // If the solution contains the node above the currently scanned node
-            // and the next node in solution is the node above
-            Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
-            Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
-            if (solution->containsNode(solutionScanningNode->getUpNode(env))
-                && solutionScanningNode->getUpNode(env).isEqual(nextNode))
+            // If the node currently being scanned is within the solution
+            Node scanningNode = Node(row, col, 0);
+            bool solutionNode = false;
+            if (solution->getLength() > 0 &&
+               solution->containsNode(scanningNode) && env[row][col] != SYMBOL_GOAL)
             {
-               std::cout << "^";
-               solutionNode = true;
-            }
-            else if (solution->containsNode(solutionScanningNode->getDownNode(env))
-                     && solutionScanningNode->getDownNode(env).isEqual(nextNode))
+               // check direction of next node and print direction
+               // and next element is x direction
+               // If the solution contains the node above the currently scanned node
+               // and the next node in solution is the node above
+               Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
+               Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
+               if (solution->containsNode(solutionScanningNode->getUpNode(env))
+                  && solutionScanningNode->getUpNode(env).isEqual(nextNode))
+               {
+                  std::cout << "^";
+                  solutionNode = true;
+               }
+               else if (solution->containsNode(solutionScanningNode->getDownNode(env))
+                        && solutionScanningNode->getDownNode(env).isEqual(nextNode))
 
-            {
-               std::cout << "v";
-               solutionNode = true;
+               {
+                  std::cout << "v";
+                  solutionNode = true;
+               }
+               else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
+                        && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
+               {
+                  std::cout << "<";
+                  solutionNode = true;
+               }
+               else if (solution->containsNode(solutionScanningNode->getRightNode(env))
+                        && solutionScanningNode->getRightNode(env).isEqual(nextNode))
+               {
+                  std::cout << ">";
+                  solutionNode = true;
+               }
             }
-            else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
-                     && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
+            if (solutionNode != true)
             {
-               std::cout << "<";
-               solutionNode = true;
-            }
-            else if (solution->containsNode(solutionScanningNode->getRightNode(env))
-                     && solutionScanningNode->getRightNode(env).isEqual(nextNode))
-            {
-               std::cout << ">";
-               solutionNode = true;
-            }
-            else
-            {
-
+               std::cout << env[row][col];
             }
          }
-         if (solutionNode != true)
+         if (row != rows-1)
          {
-            std::cout << env[row][col];
+            std::cout << std::endl;
          }
       }
-      if (row != rows-1)
+   }
+   else
+   {
+      std::cout << "Solution not found." << std::endl;
+      // print blank maze
+      printEnv(env);
+   }
+}
+
+void printEnv(Env env)
+{
+   for (int row = 0; row < *envRows; ++row)
+   {
+      for (int col = 0; col < *envCols; ++col)
       {
-         std::cout << std::endl;
+         std::cout << env[row][col];
       }
+      std::cout << std::endl;
    }
 }
 
