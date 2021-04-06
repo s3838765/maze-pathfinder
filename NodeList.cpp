@@ -6,11 +6,13 @@
 #include "NodeList.h"
 #include <iostream>
 
-NodeList::NodeList(){
+NodeList::NodeList(int rows, int cols){
    // TODO
 
    this->length = 0;
-   int MAX_DIM = 400;
+   this->rows = rows;
+   this->cols = cols;
+   int MAX_DIM = (rows-2)*(cols-2);
    this->nodes = new Node*[MAX_DIM];
 }
 
@@ -27,8 +29,9 @@ NodeList::~NodeList(){
 NodeList::NodeList(NodeList& other){
    // TODO
    this->length = other.getLength();
-   // int MAX_DIM = (rows-2)*(cols-2);
-   int MAX_DIM = 400;
+   this->rows = other.getRows();
+   this->cols = other.getCols();
+   int MAX_DIM = (rows-2)*(cols-2);
    nodes = new Node*[MAX_DIM];
    for (int i = 0; i < other.getLength(); ++i)
    {
@@ -42,6 +45,14 @@ NodeList::NodeList(NodeList& other){
 int NodeList::getLength(){
    // TODO
    return this->length;
+}
+
+int NodeList::getRows(){
+   return this->rows;
+}
+
+int NodeList::getCols(){
+   return this->cols;
 }
 
 void NodeList::addElement(Node* newPos){

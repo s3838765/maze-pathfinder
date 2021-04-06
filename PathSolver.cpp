@@ -6,7 +6,6 @@
  */
 #include "PathSolver.h"
 #include <iostream>
-#include <unistd.h>
 
 PathSolver::PathSolver() {
    // TODO
@@ -18,10 +17,10 @@ PathSolver::~PathSolver() {
    delete nodesExplored;
 }
 
-void PathSolver::forwardSearch(Env env) {
+void PathSolver::forwardSearch(Env env, int rows, int cols) {
    // TODO
-   NodeList* closedList = new NodeList();
-   NodeList* openList = new NodeList();
+   NodeList* closedList = new NodeList(rows, cols);
+   NodeList* openList = new NodeList(rows, cols);
    // NodeList* openList = nullptr;
    // NodeList* closedList = nullptr;
    Node* currentNode = nullptr;
@@ -29,9 +28,9 @@ void PathSolver::forwardSearch(Env env) {
    Node* closestNode = nullptr;
 
    // Scan environment and find start and goal nodes
-   for (int row = 0; row < ENV_DIM; ++row)
+   for (int row = 0; row < rows; ++row)
    {
-      for (int col = 0; col < ENV_DIM; ++col)
+      for (int col = 0; col < cols; ++col)
       {
          if (env[row][col] == SYMBOL_START)
          {
@@ -192,10 +191,10 @@ NodeList* PathSolver::getNodesExplored(){
    return new NodeList(*nodesExplored);
 }
 
-NodeList* PathSolver::getPath(Env env){
+NodeList* PathSolver::getPath(Env env, int rows, int cols){
    // TODO
    // Set tracking node to last node explored (goal node), add to optimal path
-   NodeList* optimalPath = new NodeList();
+   NodeList* optimalPath = new NodeList(rows, cols);
    Node* trackingNode = nodesExplored->getNode(nodesExplored->getLength()-1);
    // std::cout << "tracking node: " << trackingNode->getNodeCoordinatesStr() << std::endl;
    optimalPath->addElement(trackingNode);
@@ -257,42 +256,42 @@ NodeList* PathSolver::getPath(Env env){
 //     return isAnyReachableNodes;
 // }
 
-void PathSolver::printEnv(Env env, Node currentNode)
-{
-   for (int row = 0; row < ENV_DIM; ++row)
-   {
-      for (int col = 0; col < ENV_DIM; ++col)
-      {
-         if (row == currentNode.getRow() && col == currentNode.getCol())
-         {
-            std::cout << "x";
-         }
-         else
-         {
-            std::cout << env[row][col];
-         }
-      }
-      // std::cout << " " << row;
-      std::cout << std::endl;
-   }
-}
+// void PathSolver::printEnv(Env env, Node currentNode)
+// {
+//    for (int row = 0; row < ENV_DIM; ++row)
+//    {
+//       for (int col = 0; col < ENV_DIM; ++col)
+//       {
+//          if (row == currentNode.getRow() && col == currentNode.getCol())
+//          {
+//             std::cout << "x";
+//          }
+//          else
+//          {
+//             std::cout << env[row][col];
+//          }
+//       }
+//       // std::cout << " " << row;
+//       std::cout << std::endl;
+//    }
+// }
 
-void PathSolver::printExploredEnv(Env env, NodeList closedList)
-{
-   for (int row = 0; row < ENV_DIM; ++row)
-   {
-      for (int col = 0; col < ENV_DIM; ++col)
-      {
-         if (closedList.containsNode(Node(row, col, 0)))
-         {
-               std::cout << "x";
-         }
-         else
-         {
-               std::cout << env[row][col];
-         }
-      }
-      std::cout << " " << row;
-      std::cout << std::endl;
-   }
-}
+// void PathSolver::printExploredEnv(Env env, NodeList closedList)
+// {
+//    for (int row = 0; row < ENV_DIM; ++row)
+//    {
+//       for (int col = 0; col < ENV_DIM; ++col)
+//       {
+//          if (closedList.containsNode(Node(row, col, 0)))
+//          {
+//                std::cout << "x";
+//          }
+//          else
+//          {
+//                std::cout << env[row][col];
+//          }
+//       }
+//       std::cout << " " << row;
+//       std::cout << std::endl;
+//    }
+// }
