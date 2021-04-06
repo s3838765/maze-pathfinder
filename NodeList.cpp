@@ -10,6 +10,8 @@ NodeList::NodeList(){
    // TODO
 
    this->length = 0;
+   int MAX_DIM = 400;
+   this->nodes = new Node*[MAX_DIM];
 }
 
 NodeList::~NodeList(){
@@ -18,11 +20,16 @@ NodeList::~NodeList(){
    {
       delete this->getNode(i);
    }
+   delete[] this->nodes;
+   nodes = nullptr;
 }
 
 NodeList::NodeList(NodeList& other){
    // TODO
    this->length = other.getLength();
+   // int MAX_DIM = (rows-2)*(cols-2);
+   int MAX_DIM = 400;
+   nodes = new Node*[MAX_DIM];
    for (int i = 0; i < other.getLength(); ++i)
    {
       // this->nodes[i] = other.nodes[i];

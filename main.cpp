@@ -21,6 +21,7 @@ void testNodeList();
 
 // Read a environment from standard input.
 void readEnvStdin(Env env);
+Env readCustomEnv();
 
 // Print out a Environment to standard output with path.
 // To be implemented for Milestone 3
@@ -37,8 +38,9 @@ int main(int argc, char** argv){
    // std::cout << "DONE TESTING" << std::endl << std::endl;
 
    // Load Environment 
-   Env env;
-   readEnvStdin(env);
+   Env env = readCustomEnv();
+   // readEnvStdin(env);
+   // readCustomEnv();
 
    // Solve using forwardSearch
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
@@ -57,6 +59,11 @@ int main(int argc, char** argv){
    delete pathSolver;
    delete exploredPositions;
    delete solution;
+   for (int i = 0; i < ENV_DIM; ++i)
+   {
+      delete[] env[i];
+   }
+   delete[] env;
 }
 
 void readEnvStdin(Env env) {
@@ -70,6 +77,42 @@ void readEnvStdin(Env env) {
          std::cin >> env[row][col];
       }
    }
+}
+
+Env readCustomEnv()
+{
+   Env env = nullptr;
+   int cols = 0;
+   int rows = 0;
+   std::string mazeStr;
+
+   bool colsDefined = false;
+   do {
+      std::string input = "";
+      std::getline(std::cin, input);
+      mazeStr += input;
+      if (!colsDefined)
+      {
+         cols = mazeStr.length();
+         colsDefined = true;
+      }
+      rows++;
+   } while (std::cin.peek() != EOF);
+   std::cout << "EOF Reached. Dimensions of maze were " << rows << "x" << cols << std::endl;
+
+   env = new char*[rows];
+   for (int row = 0; row < rows; ++row)
+   {
+      env[row] = new char[cols];
+      for (int col = 0; col < cols; ++col)
+      {
+         std::cout << mazeStr[(row*cols)+col];
+         env[row][col] = mazeStr[(row*cols)+col];
+      }
+      std::cout << std::endl;
+   }
+   
+   return env;
 }
 
 void printEnvStdout(Env env, NodeList* solution) {
