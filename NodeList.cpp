@@ -120,8 +120,8 @@ void NodeList::addElement(Node* newPos){
    nodes[length] = new Node(newPos->getRow(),
                             newPos->getCol(),
                             newPos->getDistanceTraveled());
-   std::cout << "New node added at index " << length << std::endl;
-   std::cout << "Newest node: " << this->nodes[length]->getNodeCoordinatesStr() << std::endl;
+   // std::cout << "New node added at index " << length << std::endl;
+   // std::cout << "Newest node: " << this->nodes[length]->getNodeCoordinatesStr() << std::endl;
    // std::cout << std::endl;
    length++;
 }

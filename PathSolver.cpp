@@ -203,7 +203,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          if (env[row][col] == SYMBOL_START)
          {
             Node* tempNode = new Node(row, col, 0);
-            std::cout << "Start node is " << tempNode->getNodeCoordinatesStr() << std::endl;
+            // std::cout << "Start node is " << tempNode->getNodeCoordinatesStr() << std::endl;
             openList->addElement(tempNode);
             delete tempNode;
             delete currentNode;
@@ -216,7 +216,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          {
             delete goalNode;
             goalNode = new Node(row, col, 0);
-            std::cout << "Goal node is " << goalNode->getNodeCoordinatesStr() << std::endl;
+            // std::cout << "Goal node is " << goalNode->getNodeCoordinatesStr() << std::endl;
          }
       }
    }
@@ -227,16 +227,16 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       Node* tempNode = nullptr;
       // Check up down left right for open spaces, add any possible moves to openList
       // UP
-      std::cout << (currentNode->getUpChar(env) == SYMBOL_EMPTY) << std::endl;
-      std::cout << (!openList->containsNode(currentNode->getUpNode(env))) << std::endl;
+      // std::cout << (currentNode->getUpChar(env) == SYMBOL_EMPTY) << std::endl;
+      // std::cout << (!openList->containsNode(currentNode->getUpNode(env))) << std::endl;
       // std::cout << "openList = ";
       // for (int i = 0; i < openList->getLength(); ++i)
       // {
       //    std::cout << openList->getNode(i)->getNodeCoordinatesStr() << " ";
       // }
       // std::cout << "- current up node: " << currentNode->getUpNode(env).getNodeCoordinatesStr() << std::endl;
-      std::cout << (!closedList->containsNode(currentNode->getUpNode(env))) << std::endl;
-      std::cout << "| " << (currentNode->getUpNode(env).isEqual(goalNode)) << std::endl;
+      // std::cout << (!closedList->containsNode(currentNode->getUpNode(env))) << std::endl;
+      // std::cout << "| " << (currentNode->getUpNode(env).isEqual(goalNode)) << std::endl;
       if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
          !openList->containsNode(currentNode->getUpNode(env)) &&
          !closedList->containsNode(currentNode->getUpNode(env))) ||
@@ -248,7 +248,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
                              currentNode->getUpNode(env).getDistanceTraveled());
          openList->addElement(tempNode);
          // std::cout << "Adding " << tempNode->getNodeCoordinatesStr() << " to openlist" << std::endl;
-         std::cout << "Up element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
+         // std::cout << "Up element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
          delete tempNode;
       }
 
@@ -263,14 +263,14 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
                              currentNode->getDownNode(env).getCol(),
                              currentNode->getDownNode(env).getDistanceTraveled());
          openList->addElement(tempNode);
-         std::cout << "Down element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
+         // std::cout << "Down element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
          delete tempNode;
       }
 
-      std::cout << (currentNode->getLeftChar(env) == SYMBOL_EMPTY) << std::endl;
-      std::cout << (!openList->containsNode(currentNode->getLeftNode(env))) << std::endl;
-      std::cout << (!closedList->containsNode(currentNode->getLeftNode(env))) << std::endl;
-      std::cout << "| " << (currentNode->getLeftNode(env).isEqual(goalNode)) << std::endl;
+      // std::cout << (currentNode->getLeftChar(env) == SYMBOL_EMPTY) << std::endl;
+      // std::cout << (!openList->containsNode(currentNode->getLeftNode(env))) << std::endl;
+      // std::cout << (!closedList->containsNode(currentNode->getLeftNode(env))) << std::endl;
+      // std::cout << "| " << (currentNode->getLeftNode(env).isEqual(goalNode)) << std::endl;
       // LEFT
       if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY &&
          !openList->containsNode(currentNode->getLeftNode(env)) &&
@@ -281,7 +281,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          tempNode = new Node(currentNode->getLeftNode(env).getRow(),
                              currentNode->getLeftNode(env).getCol(),
                              currentNode->getLeftNode(env).getDistanceTraveled());
-         std::cout << "Left element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
+         // std::cout << "Left element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
          openList->addElement(tempNode);
          delete tempNode;
       }
@@ -296,7 +296,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          tempNode = new Node(currentNode->getRightNode(env).getRow(),
                              currentNode->getRightNode(env).getCol(),
                              currentNode->getRightNode(env).getDistanceTraveled());
-         std::cout << "Right element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
+         // std::cout << "Right element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
          openList->addElement(tempNode);
          delete tempNode;
          // tempNode = nullptr;
@@ -304,6 +304,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       tempNode = nullptr;
 
       // Find node with smallest estimated distance
+      // Node* closestNode = nullptr;
       bool closestNodeInitialised = false;
       for (int i = 0; i < openList->getLength(); ++i)
       {
@@ -317,24 +318,30 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
             if (!closestNodeInitialised)
             {
                   // delete closestNode;
+                  // closestNode = iterationNode;
                   closestNode = new Node(iterationNode->getRow(),
                                          iterationNode->getCol(),
                                          iterationNode->getDistanceTraveled());
                   closestNodeInitialised = true;
-                  std::cout << "Closest node initialised to " << closestNode->getNodeCoordinatesStr() << std::endl;
+                  // std::cout << "Closest node initialised to " << closestNode->getNodeCoordinatesStr() << std::endl;
             }
 
             if (iterationNode->getEstimatedDist2Goal(goalNode) <
                closestNode->getEstimatedDist2Goal(goalNode))
             {
                   // closestNode = iterationNode;
-                  // delete closestNode;
-                  closestNode = new Node(iterationNode->getRow(),
-                                         iterationNode->getCol(),
-                                         iterationNode->getDistanceTraveled());
-                  std::cout << "Closest node set to " << closestNode->getNodeCoordinatesStr() << std::endl;
+                  delete closestNode; // Depends on maze?
+                  closestNode = new Node(iterationNode->getRow(), iterationNode->getCol(), iterationNode->getDistanceTraveled());
+                  // std::cout << "Closest node set to " << closestNode->getNodeCoordinatesStr() << std::endl;
             }
          }
+      }
+      // If a valid node was not found to be the closest, set closest to current
+      if (!closestNodeInitialised)
+      {
+         closestNode = new Node(currentNode->getRow(),
+                                currentNode->getCol(),
+                                currentNode->getDistanceTraveled());
       }
 
       // std::cout << "openList length: " << openList->getLength() << std::endl;
@@ -342,6 +349,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       // std::cout << (openList->getLength() != closedList->getLength()) << " " << !closestNode->isEqual(goalNode) << std::endl;
 
       // Node* previousNode = nullptr;
+      // No possible moves
       if (openList->getLength() != closedList->getLength() &&
           !closestNode->isEqual(goalNode)/* &&
           openList->getLength() > 0*/)
@@ -349,7 +357,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          // previousNode = new Node(currentNode->getRow(),
                                  // currentNode->getCol(),
                                  // currentNode->getDistanceTraveled());
-         std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
+         // std::cout << "Previous node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
          closedList->addElement(currentNode);
          delete currentNode;
          currentNode = closestNode;
@@ -357,17 +365,9 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
                               //   closestNode->getCol(),
                               //   closestNode->getDistanceTraveled());
          // closedList->addElement(previousNode);
-         std::cout << "Set current node to " << currentNode->getNodeCoordinatesStr() << std::endl;
+         // std::cout << "Set current node to " << currentNode->getNodeCoordinatesStr() << std::endl;
       }
       // If goal node is found
-      // No possible moves
-      else if (openList->getLength() == closedList->getLength())
-      {
-         // std::cout << "No possible moves found." << std::endl;
-         // print all visited nodes with x
-         std::cout << "Solution not found." << std::endl;
-         printVisitedNodes(env, *closedList, rows, cols);
-      }
       else if (openList->getLength() != closedList->getLength() && 
                closestNode->isEqual(goalNode))
       {
@@ -386,6 +386,7 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          // delete currentNode;
          // currentNode = nullptr;
       }
+
       // std::cout << "Previous node " << previousNode->getNodeCoordinatesStr() << " added to closedlist" << std::endl;
       // delete previousNode;
       // std::cout << "openList length: " << openList->getLength() << std::endl;
@@ -402,30 +403,38 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       // }
       // std::cout << std::endl;
 
-      for (int row = 0; row < rows; row++)
-      {
-         for (int col = 0; col < cols; col++)
-         {
-            Node* iterationNode = new Node(row, col, 0);
-            if (currentNode->isEqual(iterationNode))
-            {
-               std::cout << "x";
-            }
-            else
-            {
-               std::cout << env[row][col]; 
-            }
-            delete iterationNode;
-            iterationNode = nullptr;
-         }
-         std::cout << std::endl;
-      }
+      // for (int row = 0; row < rows; row++)
+      // {
+      //    for (int col = 0; col < cols; col++)
+      //    {
+      //       Node* iterationNode = new Node(row, col, 0);
+      //       if (currentNode->isEqual(iterationNode))
+      //       {
+      //          std::cout << "x";
+      //       }
+      //       else
+      //       {
+      //          std::cout << env[row][col]; 
+      //       }
+      //       delete iterationNode;
+      //       iterationNode = nullptr;
+      //    }
+      //    std::cout << std::endl;
+      // }
 
 
       // std::cout << "-------------------" << std::endl;
    }
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());
+
+   if (openList->getLength() == closedList->getLength())
+   {
+      // std::cout << "No possible moves found." << std::endl;
+      // print all visited nodes with x
+      // std::cout << "Solution not found." << std::endl;
+      printVisitedNodes(env, *closedList, rows, cols);
+   }
 
 
    // std::cout << std::endl;

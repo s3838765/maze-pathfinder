@@ -50,6 +50,8 @@ int Node::getEstimatedDist2Goal(Node* goal){
     
 //--------------------------------                             
 
+// TODO: Node copy constructor
+
 char Node::getUpChar(Env env)
 {
    return env [this->row-1] [this->col];
