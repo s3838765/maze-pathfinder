@@ -33,7 +33,8 @@ NodeList::~NodeList(){
    // TODO
    for (int i = 0; i < this->length; ++i)
    {
-      delete this->getNode(i);
+      // delete this->getNode(i);
+      delete this->nodes[i];
    }
    delete[] this->nodes;
    nodes = nullptr;
@@ -72,9 +73,15 @@ int NodeList::getLength(){
    return this->length;
 }
 
+// void NodeList::addElement(Node* newPos)
+// {
+//    nodes[length] = new Node(newPos->getRow(),
+//                             newPos->getCol(),
+//                             newPos->getDistanceTraveled());
+// }
+
 void NodeList::addElement(Node* newPos){
    // TODO
-
    // Create tempList
    Node** tempList = new Node*[length]; // COPY NODES INTO TEMPLIST
    // Deep copy values from nodes into tempList
@@ -86,13 +93,14 @@ void NodeList::addElement(Node* newPos){
    }
 
    // Completely delete nodes
-   // Doesn't affect memory?
    for (int i = 0; i < length; ++i)
    {
-      std::cout << "Deleting " << this->nodes[i]->getNodeCoordinatesStr() << std::endl;
+      // std::cout << "Deleting " << this->nodes[i]->getNodeCoordinatesStr() << std::endl;
       delete this->nodes[i];
+      this->nodes[i] = nullptr;
    }
    delete[] this->nodes;
+   this->nodes = nullptr;
 
    // Create a new nodes array with 1 extra length
    this->nodes = new Node*[length+1];
@@ -103,15 +111,18 @@ void NodeList::addElement(Node* newPos){
                                 tempList[i]->getCol(),
                                 tempList[i]->getDistanceTraveled());
       delete tempList[i];
+      tempList[i] = nullptr;
    }
-   delete tempList;
+   delete[] tempList;
+   tempList = nullptr;
+
    // Add the new value to nodes
    nodes[length] = new Node(newPos->getRow(),
                             newPos->getCol(),
                             newPos->getDistanceTraveled());
    std::cout << "New node added at index " << length << std::endl;
    std::cout << "Newest node: " << this->nodes[length]->getNodeCoordinatesStr() << std::endl;
-   std::cout << std::endl;
+   // std::cout << std::endl;
    length++;
 }
 
