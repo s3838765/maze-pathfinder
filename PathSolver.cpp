@@ -187,8 +187,8 @@ void PathSolver::forwardSearch(Env env) {
 
 void PathSolver::forwardSearch(Env env, int rows, int cols) {
    // TODO
-   NodeList* closedList = new NodeList(rows, cols);
-   NodeList* openList = new NodeList(rows, cols);
+   NodeList* openList = new NodeList();
+   NodeList* closedList = new NodeList();
    // NodeList* openList = nullptr;
    // NodeList* closedList = nullptr;
    Node* currentNode = nullptr;
@@ -299,10 +299,13 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       }
       // If goal node is found
       // No possible moves
-      // else if (openList->getLength() == closedList->getLength())
-      // {
-      //    // std::cout << "No possible moves found." << std::endl;
-      // }
+      else if (openList->getLength() == closedList->getLength())
+      {
+         // std::cout << "No possible moves found." << std::endl;
+         // print all visited nodes with x
+         std::cout << "Solution not found." << std::endl;
+         printVisitedNodes(env, *closedList, rows, cols);
+      }
       else if (openList->getLength() != closedList->getLength() && 
                closestNode->isEqual(goalNode))
       {
@@ -314,11 +317,6 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());
 
-   if (openList->getLength() == closedList->getLength())
-   {
-      // std::cout << "No possible moves found." << std::endl;
-      closedList->addElement(currentNode);
-   }
 
    // std::cout << std::endl;
    // printExploredEnv(env, closedList);
@@ -333,38 +331,71 @@ NodeList* PathSolver::getNodesExplored(){
    return new NodeList(*nodesExplored);
 }
 
+// NodeList* PathSolver::getPath(Env env){
+//    // TODO
+//    // Set tracking node to last node explored (goal node), add to optimal path
+//    NodeList* optimalPath = new NodeList();
+//    Node* trackingNode = nodesExplored->getNode(nodesExplored->getLength()-1);
+//    // std::cout << "tracking node: " << trackingNode->getNodeCoordinatesStr() << std::endl;
+//    optimalPath->addElement(trackingNode);
+//    // std::cout << "tracking node added to optimal path" << std::endl;
+
+//    // Scan through nodesExplored backwards and add every reachable node to optimal path
+//    for (int i = nodesExplored->getLength()-1; i > 0; --i) //>=
+//    {
+//       Node* iterationNode = nodesExplored->getNode(i);
+//       // std::cout << "iteration node: " << iterationNode->getNodeCoordinatesStr() << std::endl;
+//       if (iterationNode->getDistanceTraveled() == trackingNode->getDistanceTraveled()-1)
+//       {
+//          if (trackingNode->canReach(iterationNode, env))
+//          {
+//             // std::cout << "tracking node " << trackingNode->getNodeCoordinatesStr()
+//                      //  << " can reach iteration node at "
+//                      //  << iterationNode->getNodeCoordinatesStr() << std::endl;
+//             // delete trackingNode;
+//             trackingNode = iterationNode;
+//             // std::cout << "tracking node now equal to " 
+//                      //  << trackingNode->getNodeCoordinatesStr() << std::endl;
+//             optimalPath->addElement(iterationNode);
+//             // std::cout << "iteration node " << iterationNode->getNodeCoordinatesStr()
+//                      //  << " has been added to the optimal path." << std::endl;
+            
+//          }
+//       }
+//    }
+//    // Reverse optimal path
+//    for (int i = 0; i < optimalPath->getLength()/2; ++i)
+//    {
+//       Node temp = *optimalPath->getNode(i);
+//       *optimalPath->getNode(i) = *optimalPath->getNode(optimalPath->getLength()-1-i);
+//       *optimalPath->getNode(optimalPath->getLength()-1-i) = temp;
+//    }
+//    return optimalPath;
+// }
+
+//--------------------------------                             
+
 NodeList* PathSolver::getPath(Env env){
    // TODO
    // Set tracking node to last node explored (goal node), add to optimal path
    NodeList* optimalPath = new NodeList();
    Node* trackingNode = nodesExplored->getNode(nodesExplored->getLength()-1);
-   // std::cout << "tracking node: " << trackingNode->getNodeCoordinatesStr() << std::endl;
    optimalPath->addElement(trackingNode);
-   // std::cout << "tracking node added to optimal path" << std::endl;
 
    // Scan through nodesExplored backwards and add every reachable node to optimal path
    for (int i = nodesExplored->getLength()-1; i > 0; --i) //>=
    {
       Node* iterationNode = nodesExplored->getNode(i);
-      // std::cout << "iteration node: " << iterationNode->getNodeCoordinatesStr() << std::endl;
       if (iterationNode->getDistanceTraveled() == trackingNode->getDistanceTraveled()-1)
       {
          if (trackingNode->canReach(iterationNode, env))
          {
-            // std::cout << "tracking node " << trackingNode->getNodeCoordinatesStr()
-                     //  << " can reach iteration node at "
-                     //  << iterationNode->getNodeCoordinatesStr() << std::endl;
-            // delete trackingNode;
             trackingNode = iterationNode;
-            // std::cout << "tracking node now equal to " 
-                     //  << trackingNode->getNodeCoordinatesStr() << std::endl;
             optimalPath->addElement(iterationNode);
-            // std::cout << "iteration node " << iterationNode->getNodeCoordinatesStr()
-                     //  << " has been added to the optimal path." << std::endl;
-            
          }
       }
    }
+
    // Reverse optimal path
    for (int i = 0; i < optimalPath->getLength()/2; ++i)
    {
@@ -375,35 +406,23 @@ NodeList* PathSolver::getPath(Env env){
    return optimalPath;
 }
 
-//--------------------------------                             
-
-NodeList* PathSolver::getPath(Env env, int rows, int cols){
-   // TODO
-   // Set tracking node to last node explored (goal node), add to optimal path
-   NodeList* optimalPath = new NodeList(rows, cols);
-   Node* trackingNode = nodesExplored->getNode(nodesExplored->getLength()-1);
-   optimalPath->addElement(trackingNode);
-
-   // Scan through nodesExplored backwards and add every reachable node to optimal path
-   for (int i = nodesExplored->getLength()-1; i > 0; --i) //>=
+void PathSolver::printVisitedNodes(Env env, NodeList visitedList, int rows, int cols)
+{
+   Node* startNode = visitedList.getNode(0);
+   for (int row = 0; row < rows; ++row)
    {
-      Node* iterationNode = nodesExplored->getNode(i);
-      if (iterationNode->getDistanceTraveled() == trackingNode->getDistanceTraveled()-1)
+      for (int col = 0; col < cols; ++col)
       {
-         if (trackingNode->canReach(iterationNode, env))
+         if (visitedList.containsNode(Node(row, col, 0)) &&
+             !Node(row, col, 0).isEqual(startNode))
          {
-            trackingNode = iterationNode;
-            optimalPath->addElement(iterationNode);
+            std::cout << "x";
+         }
+         else
+         {
+            std::cout << env[row][col];
          }
       }
+      std::cout << std::endl;
    }
-
-   // Reverse optimal path
-   for (int i = 0; i < optimalPath->getLength()/2; ++i)
-   {
-      Node temp = *optimalPath->getNode(i);
-      *optimalPath->getNode(i) = *optimalPath->getNode(optimalPath->getLength()-1-i);
-      *optimalPath->getNode(optimalPath->getLength()-1-i) = temp;
-   }
-   return optimalPath;
 }

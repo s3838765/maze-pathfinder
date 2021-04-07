@@ -36,8 +36,9 @@ public:
    int getNodeIndex(Node node);
    std::string printLatestNode();
    Node* getNextNode(int nodeIndex);
-   NodeList(int rows, int cols);
-   NodeList(NodeList& other, int rows, int cols);
+   // NodeList(int rows, int cols);
+   // NodeList(int length);
+   // NodeList(NodeList& other, int rows, int cols);
 
 
 

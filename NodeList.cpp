@@ -16,12 +16,18 @@ NodeList::NodeList(){
 }
 
 // Overloaded
-NodeList::NodeList(int rows, int cols)
-{
-   this->length = 0;
-   int MAX_DIM = (rows-2)*(cols-2);
-   this->nodes = new Node*[MAX_DIM];
-}
+// NodeList::NodeList(int rows, int cols)
+// {
+//    this->length = 0;
+//    int MAX_DIM = (rows-2)*(cols-2);
+//    this->nodes = new Node*[MAX_DIM];
+// }
+
+// NodeList::NodeList(int length)
+// {
+//    this->length = length;
+//    this->nodes = new Node*[length];
+// }
 
 NodeList::~NodeList(){
    // TODO
@@ -46,20 +52,20 @@ NodeList::NodeList(NodeList& other){
    }
 }
 
-// Overloaded
-NodeList::NodeList(NodeList& other, int rows, int cols){
-   // TODO
-   this->length = other.getLength();
-   int MAX_DIM = (cols-2)*(cols-2);
-   nodes = new Node*[MAX_DIM];
-   for (int i = 0; i < other.getLength(); ++i)
-   {
-      // this->nodes[i] = other.nodes[i];
-      this->nodes[i] = new Node(other.getNode(i)->getRow(), 
-                                other.getNode(i)->getCol(), 
-                                other.getNode(i)->getDistanceTraveled());
-   }
-}
+// // Overloaded
+// NodeList::NodeList(NodeList& other, int rows, int cols){
+//    // TODO
+//    this->length = other.getLength();
+//    int MAX_DIM = (cols-2)*(cols-2);
+//    nodes = new Node*[MAX_DIM];
+//    for (int i = 0; i < other.getLength(); ++i)
+//    {
+//       // this->nodes[i] = other.nodes[i];
+//       this->nodes[i] = new Node(other.getNode(i)->getRow(), 
+//                                 other.getNode(i)->getCol(), 
+//                                 other.getNode(i)->getDistanceTraveled());
+//    }
+// }
 
 int NodeList::getLength(){
    // TODO
@@ -68,11 +74,44 @@ int NodeList::getLength(){
 
 void NodeList::addElement(Node* newPos){
    // TODO
-   // delete[] this->nodes;
-   // this->nodes = new NodeList*()
+
+   // Create tempList
+   Node** tempList = new Node*[length]; // COPY NODES INTO TEMPLIST
+   // Deep copy values from nodes into tempList
+   for (int i = 0; i < this->length; ++i)
+   {
+      tempList[i] = new Node(nodes[i]->getRow(),
+                             nodes[i]->getCol(),
+                             nodes[i]->getDistanceTraveled());
+   }
+
+   // Completely delete nodes
+   // Doesn't affect memory?
+   for (int i = 0; i < length; ++i)
+   {
+      std::cout << "Deleting " << this->nodes[i]->getNodeCoordinatesStr() << std::endl;
+      delete this->nodes[i];
+   }
+   delete[] this->nodes;
+
+   // Create a new nodes array with 1 extra length
+   this->nodes = new Node*[length+1];
+   // Copy the values from tempList to nodes
+   for (int i = 0; i < this->length; ++i)
+   {
+      this->nodes[i] = new Node(tempList[i]->getRow(),
+                                tempList[i]->getCol(),
+                                tempList[i]->getDistanceTraveled());
+      delete tempList[i];
+   }
+   delete tempList;
+   // Add the new value to nodes
    nodes[length] = new Node(newPos->getRow(),
                             newPos->getCol(),
                             newPos->getDistanceTraveled());
+   std::cout << "New node added at index " << length << std::endl;
+   std::cout << "Newest node: " << this->nodes[length]->getNodeCoordinatesStr() << std::endl;
+   std::cout << std::endl;
    length++;
 }
 

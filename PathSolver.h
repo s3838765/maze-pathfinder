@@ -33,7 +33,8 @@ public:
    /*                                           */
    bool isAnyReachableNodes(Env env, Node currentNode, NodeList closedList);
    void forwardSearch(Env env, int rows, int cols);
-   NodeList* getPath(Env env, int rows, int cols);
+   // NodeList* getPath(Env env, int rows, int cols);
+   void printVisitedNodes(Env env, NodeList visitedList, int rows, int cols);
 
 private:
    /*                                           */

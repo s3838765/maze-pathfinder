@@ -63,7 +63,8 @@ int main(int argc, char** argv){
 
    // Get the path
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
-   NodeList* solution = pathSolver->getPath(env, *envRows, *envCols);
+   // NodeList* solution = pathSolver->getPath(env, *envRows, *envCols);
+   NodeList* solution = pathSolver->getPath(env);
 
    printEnvStdout(env, solution, *envRows, *envCols);
 
@@ -143,7 +144,8 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
             Node scanningNode = Node(row, col, 0);
             bool solutionNode = false;
             if (solution->getLength() > 0 &&
-               solution->containsNode(scanningNode) && env[row][col] != SYMBOL_GOAL)
+                solution->containsNode(scanningNode) && 
+                env[row][col] != SYMBOL_GOAL)
             {
                // check direction of next node and print direction
                // and next element is x direction
@@ -182,17 +184,12 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
                std::cout << env[row][col];
             }
          }
+         // Do not print extra newline at the end of the maze
          if (row != rows-1)
          {
             std::cout << std::endl;
          }
       }
-   }
-   else
-   {
-      std::cout << "Solution not found." << std::endl;
-      // print blank maze
-      printEnv(env);
    }
 }
 
