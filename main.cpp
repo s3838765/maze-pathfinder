@@ -54,8 +54,10 @@ int main(int argc, char** argv){
    // Solve using forwardSearch
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
    PathSolver* pathSolver = new PathSolver();
-   // Will work assuming the env is 20x20
+
+   // The following line will work assuming the env is 20x20
    // pathSolver->forwardSearch(env);
+   
    pathSolver->forwardSearch(env, *envRows, *envCols);
 
    NodeList* exploredPositions = nullptr;
@@ -63,11 +65,12 @@ int main(int argc, char** argv){
 
    // Get the path
    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 3
-   // NodeList* solution = pathSolver->getPath(env, *envRows, *envCols);
    NodeList* solution = pathSolver->getPath(env);
 
+   // Print shortest path with directions
    printEnvStdout(env, solution, *envRows, *envCols);
 
+   // Free memory
    delete pathSolver;
    delete exploredPositions;
    delete solution;
@@ -80,67 +83,81 @@ int main(int argc, char** argv){
    delete envCols;
 }
 
+// Read environment input of any size
 Env readCustomEnv()
 {
-   Env env = nullptr;
    int* cols = envCols;
    int* rows = envRows;
    std::string mazeStr;
 
    bool colsDefined = false;
-   do {
+   // Collect inputted lines until end of file
+   do 
+   {
       std::string input = "";
+      // Get every inputted line and concatenate to a string
       std::getline(std::cin, input);
       mazeStr += input;
+      
+      // Define the number of columns in the maze (using the first row inputted)
       if (!colsDefined)
       {
          *cols = mazeStr.length();
          colsDefined = true;
       }
       (*rows)++;
-   } while (std::cin.peek() != EOF);
+   } 
+   while (std::cin.peek() != EOF);
 
-   env = new char*[*rows];
+   // Create environment based on number of rows
+   Env env = new char*[*rows];
    for (int row = 0; row < *rows; ++row)
    {
+      // Create a new character array for every row
       env[row] = new char[*cols];
       for (int col = 0; col < *cols; ++col)
       {
+         // Use mazeStr to set the characters within the env array
          env[row][col] = mazeStr[row*(*cols)+col];
       }
    }
-   
    return env;
 }
 
-
+// Prints given maze with the solution, including directional arrows
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
-   //TODO
-   // if last node is not goal
+   // If the last node is the goal node
    Node* finalNode = solution->getNode(solution->getLength()-1);
    if (env[finalNode->getRow()][finalNode->getCol()] == SYMBOL_GOAL)
    {
+      // Iterate through every node in the solution
       for (int i = 0; i < solution->getLength()-1; ++i)
       {
+         // Check which direction the next node is, set the character
+         // at that position to the respective arrow
          Node solutionNode = *solution->getNode(i);
          if (solutionNode.getUpNode(env).isEqual(solution->getNextNode(i)))
          {
             env[solutionNode.getRow()][solutionNode.getCol()] = '^';
          }
-         else if (solutionNode.getDownNode(env).isEqual(solution->getNextNode(i)))
+         else if (solutionNode.getDownNode(env).isEqual(solution->
+                                                               getNextNode(i)))
          {
             env[solutionNode.getRow()][solutionNode.getCol()] = 'v';
          }
-         else if (solutionNode.getLeftNode(env).isEqual(solution->getNextNode(i)))
+         else if (solutionNode.getLeftNode(env).isEqual(solution->
+                                                               getNextNode(i)))
          {
             env[solutionNode.getRow()][solutionNode.getCol()] = '<';
          }
-         else if (solutionNode.getRightNode(env).isEqual(solution->getNextNode(i)))
+         else if (solutionNode.getRightNode(env).isEqual(solution->
+                                                               getNextNode(i)))
          {
             env[solutionNode.getRow()][solutionNode.getCol()] = '>';
          }
       }
 
+      // Print out the environment
       for (int row = 0; row < rows; ++row)
       {
          for (int col = 0; col < cols; ++col)
@@ -149,18 +166,6 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
          }
          std::cout << std::endl;
       }
-   }
-}
-
-void printEnv(Env env)
-{
-   for (int row = 0; row < *envRows; ++row)
-   {
-      for (int col = 0; col < *envCols; ++col)
-      {
-         std::cout << env[row][col];
-      }
-      std::cout << std::endl;
    }
 }
 
@@ -193,17 +198,22 @@ void printEnv(Env env)
 //    Node* b1 = new Node(1, 1, 1);
 //    nodeList->addElement(b1);
 //    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
+//    delete b1;
+//    b1 = nullptr;
 
 //    // Add second Nodetest
 //    Node* b2 = new Node(0, 0, 1);
 //    nodeList->addElement(b2);
 //    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
+//    delete b2;
+//    b2 = nullptr;
 
 //    // Test Get-ith - should be 0,0,1
 //    Node* getB = nodeList->getNode(1);
 //    std::cout << getB->getRow() << ",";
 //    std::cout << getB->getCol() << ",";
 //    std::cout << getB->getDistanceTraveled() << std::endl;
+//    delete nodeList;
 
 //    // Print out the NodeList
 //    std::cout << "PRINTING OUT A NODELIST IS AN EXERCISE FOR YOU TO DO" << std::endl;
