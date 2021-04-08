@@ -12,32 +12,17 @@ NodeList::NodeList(){
 
    this->length = 0;
    // int MAX_DIM = (envRows-2)*(envCols-2);
-   this->nodes = new Node*[length];
+   this->nodes = new Node*[this->length];
 }
 
-// Overloaded
-// NodeList::NodeList(int rows, int cols)
-// {
-//    this->length = 0;
-//    int MAX_DIM = (rows-2)*(cols-2);
-//    this->nodes = new Node*[MAX_DIM];
-// }
-
-// NodeList::NodeList(int length)
-// {
-//    this->length = length;
-//    this->nodes = new Node*[length];
-// }
-
-NodeList::~NodeList(){
-   // TODO
+NodeList::~NodeList()
+{
    for (int i = 0; i < this->length; ++i)
    {
-      // delete this->getNode(i);
       delete this->nodes[i];
    }
    delete[] this->nodes;
-   nodes = nullptr;
+   this->nodes = nullptr;
 }
 
 NodeList::NodeList(NodeList& other){
@@ -46,10 +31,10 @@ NodeList::NodeList(NodeList& other){
    nodes = new Node*[length];
    for (int i = 0; i < other.getLength(); ++i)
    {
-      // this->nodes[i] = other.nodes[i];
-      this->nodes[i] = new Node(other.getNode(i)->getRow(), 
-                                other.getNode(i)->getCol(), 
-                                other.getNode(i)->getDistanceTraveled());
+      this->nodes[i] = new Node(*other.getNode(i));
+      // this->nodes[i] = new Node(other.getNode(i)->getRow(), 
+      //                           other.getNode(i)->getCol(), 
+      //                           other.getNode(i)->getDistanceTraveled());
    }
 }
 
@@ -145,33 +130,6 @@ bool NodeList::containsNode(Node node)
    return isContained;
 }
 
-// Get index of particular node in nodelist
-Node* NodeList::getNodeAtIndex(Node node)
-{
-   Node* returnNode = nullptr;
-   for (int i = 0; i < this->length; ++i)
-   {
-      if (this->getNode(i)->isEqual(&node))
-      {
-         returnNode = this->getNode(i);
-      }
-   }
-   return returnNode;
-}
-
-int NodeList::getNodeIndex(Node node)
-{
-   int nodeIndex = 0;
-   for (int i = 0; i < this->length; ++i)
-   {
-      if (this->getNode(i)->isEqual(&node))
-      {
-         nodeIndex = i;
-      }
-   }
-   return nodeIndex;
-}
-
 Node* NodeList::getNextNode(int nodeIndex)
 {
    Node* nextNode = nullptr;
@@ -180,9 +138,4 @@ Node* NodeList::getNextNode(int nodeIndex)
       nextNode = this->getNode(nodeIndex+1);
    }
    return nextNode;
-}
-
-std::string NodeList::printLatestNode()
-{
-   return this->getNode(this->length-1)->getNodeCoordinatesStr();
 }

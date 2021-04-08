@@ -31,16 +31,7 @@ public:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
    bool containsNode(Node node);
-   // bool containsNode(Node* node);
-   Node* getNodeAtIndex(Node node);
-   int getNodeIndex(Node node);
-   std::string printLatestNode();
    Node* getNextNode(int nodeIndex);
-   // NodeList(int rows, int cols);
-   // NodeList(int length);
-   // NodeList(NodeList& other, int rows, int cols);
-
-
 
 private:
    /*                                           */
@@ -58,8 +49,5 @@ private:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
 };
-
-
-
 
 #endif //COSC_ASSIGN_ONE_NODELIST

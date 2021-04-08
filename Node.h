@@ -44,6 +44,7 @@ public:
    Node getRightNode(Env env);
    bool canReach(Node* targetNode, Env env);
    // bool isContained(NodeList nodeList); // MAYBE
+   Node(const Node& other);
 
 
 private:

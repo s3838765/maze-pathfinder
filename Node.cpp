@@ -16,6 +16,13 @@ Node::Node(int row, int col, int dist_traveled)
    this->dist_traveled = dist_traveled;
 }
 
+Node::Node(const Node& other)
+{
+   this->row = other.row;
+   this->col = other.col;
+   this->dist_traveled = other.dist_traveled;
+}
+
 Node::~Node(){
    // TODO
 }
@@ -82,12 +89,6 @@ std::string Node::getNodeCoordinatesStr()
    nodeCoordinates += ")";
    return nodeCoordinates;
 }
-
-// bool Node::isEqual(Node node)
-// {
-//    return this->row == node.getRow() && 
-//          this->col == node.getCol(); 
-// }
 
 bool Node::isEqual(Node* node)
 {

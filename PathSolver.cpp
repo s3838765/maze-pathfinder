@@ -20,8 +20,6 @@ PathSolver::~PathSolver() {
 //    // TODO
 //    NodeList* closedList = new NodeList();
 //    NodeList* openList = new NodeList();
-//    // NodeList* openList = nullptr;
-//    // NodeList* closedList = nullptr;
 //    Node* currentNode = nullptr;
 //    Node* goalNode = nullptr;
 //    Node* closestNode = nullptr;
@@ -140,8 +138,6 @@ PathSolver::~PathSolver() {
 //          }
 //          }
 //       }
-
-
 //       closedList->addElement(currentNode);
 //       // std::cout << "Previous node " << currentNode->getNodeCoordinatesStr()
 //                //  << " added to closed list" << std::endl;
@@ -184,21 +180,18 @@ PathSolver::~PathSolver() {
 
 //    // std::cout << "Exiting pathfinder." << std::endl;
 // }
-
-void PathSolver::forwardSearch(Env env, int rows, int cols) {
+void PathSolver::forwardSearch(Env env) {
    // TODO
    NodeList* openList = new NodeList();
    NodeList* closedList = new NodeList();
-   // NodeList* openList = nullptr;
-   // NodeList* closedList = nullptr;
    Node* currentNode = nullptr;
    Node* goalNode = nullptr;
    // Node* closestNode = nullptr;
 
    // Scan environment and find start and goal nodes
-   for (int row = 0; row < rows; ++row)
+   for (int row = 0; row < ENV_DIM; ++row)
    {
-      for (int col = 0; col < cols; ++col)
+      for (int col = 0; col < ENV_DIM; ++col)
       {
          if (env[row][col] == SYMBOL_START)
          {
@@ -209,34 +202,22 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
             delete currentNode;
             // currentNode = openList->getNode(0);
             currentNode = new Node(openList->getNode(0)->getRow(),
-                                    openList->getNode(0)->getCol(),
-                                    openList->getNode(0)->getDistanceTraveled());
+                                   openList->getNode(0)->getCol(),
+                                   openList->getNode(0)->getDistanceTraveled());
          }
          else if (env[row][col] == SYMBOL_GOAL)
          {
             delete goalNode;
             goalNode = new Node(row, col, 0);
-            // std::cout << "Goal node is " << goalNode->getNodeCoordinatesStr() << std::endl;
          }
       }
    }
 
    do
    {
-      // std::cout << "Current node = " << currentNode->getNodeCoordinatesStr() << std::endl;
       Node* tempNode = nullptr;
       // Check up down left right for open spaces, add any possible moves to openList
       // UP
-      // std::cout << (currentNode->getUpChar(env) == SYMBOL_EMPTY) << std::endl;
-      // std::cout << (!openList->containsNode(currentNode->getUpNode(env))) << std::endl;
-      // std::cout << "openList = ";
-      // for (int i = 0; i < openList->getLength(); ++i)
-      // {
-      //    std::cout << openList->getNode(i)->getNodeCoordinatesStr() << " ";
-      // }
-      // std::cout << "- current up node: " << currentNode->getUpNode(env).getNodeCoordinatesStr() << std::endl;
-      // std::cout << (!closedList->containsNode(currentNode->getUpNode(env))) << std::endl;
-      // std::cout << "| " << (currentNode->getUpNode(env).isEqual(goalNode)) << std::endl;
       if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
          !openList->containsNode(currentNode->getUpNode(env)) &&
          !closedList->containsNode(currentNode->getUpNode(env))) ||
@@ -266,10 +247,6 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          delete tempNode;
       }
 
-      // std::cout << (currentNode->getLeftChar(env) == SYMBOL_EMPTY) << std::endl;
-      // std::cout << (!openList->containsNode(currentNode->getLeftNode(env))) << std::endl;
-      // std::cout << (!closedList->containsNode(currentNode->getLeftNode(env))) << std::endl;
-      // std::cout << "| " << (currentNode->getLeftNode(env).isEqual(goalNode)) << std::endl;
       // LEFT
       if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY &&
          !openList->containsNode(currentNode->getLeftNode(env)) &&
@@ -298,163 +275,57 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
          openList->addElement(tempNode);
          // std::cout << "Right element " << tempNode->getNodeCoordinatesStr() << " added to openlist" << std::endl;
          delete tempNode;
-         // tempNode = nullptr;
       }
       tempNode = nullptr;
 
-      // Find node with smallest estimated distance
-      // Node* closestNode = nullptr;
       Node previousNode = Node(0,0,0);
-      // Node* previousNode = nullptr;
       bool closestNodeInitialised = false;
       for (int i = 0; i < openList->getLength(); ++i)
       {
          Node* iterationNode = openList->getNode(i);
 
-         // If node is valid to be closest (not current node and not in closed list)
-         // std::cout << "!iterationNode->isEqual(currentNode)" << !iterationNode->isEqual(currentNode) << std::endl;
          if (!iterationNode->isEqual(currentNode) &&
              !closedList->containsNode(*iterationNode))
          {
             if (!closestNodeInitialised)
             {
-                  // delete closestNode;
-                  // closestNode = iterationNode;
-                  // closestNode = new Node(iterationNode->getRow(),
-                                       //   iterationNode->getCol(),
-                                       //   iterationNode->getDistanceTraveled());
-                  // delete previousNode;
-                  // *previousNode = *currentNode;
                   previousNode = *currentNode;
                   delete currentNode;
-                  // currentNode = iterationNode;
                   currentNode = new Node(iterationNode->getRow(), iterationNode->getCol(), iterationNode->getDistanceTraveled());
-                  // std::cout << "Current node set to (x)" << currentNode->getNodeCoordinatesStr() << std::endl;
                   closestNodeInitialised = true;
-                  // std::cout << "Closest node initialised to " << closestNode->getNodeCoordinatesStr() << std::endl;
             }
 
             if (iterationNode->getEstimatedDist2Goal(goalNode) <
                 currentNode->getEstimatedDist2Goal(goalNode) &&
                 !iterationNode->isEqual(&previousNode)) // maybe remove?
             {
-                  // closestNode = iterationNode;
-                  // delete closestNode; // Depends on maze?
-                  // closestNode = new Node(iterationNode->getRow(), iterationNode->getCol(), iterationNode->getDistanceTraveled());
-                  // std::cout << "Closest node set to " << closestNode->getNodeCoordinatesStr() << std::endl;
-                  // previousNode = *currentNode;
                   delete currentNode;
-                  // currentNode = iterationNode;
                   currentNode = new Node(iterationNode->getRow(), iterationNode->getCol(), iterationNode->getDistanceTraveled());
-                  // std::cout << "Current node set to (y)" << currentNode->getNodeCoordinatesStr() << std::endl;
             }
          }
       }
-      // If a valid node was not found to be the closest, set closest to current
-      // if (!closestNodeInitialised)
-      // {
-      //    closestNode = new Node(currentNode->getRow(),
-      //                           currentNode->getCol(),
-      //                           currentNode->getDistanceTraveled());
-      // }
 
-      // std::cout << "openList length: " << openList->getLength() << std::endl;
-      // std::cout << "closedList length: " << closedList->getLength() << std::endl;
-      // std::cout << (openList->getLength() != closedList->getLength()) << " " << !closestNode->isEqual(goalNode) << std::endl;
-
-      // Node* previousNode = nullptr;
-      // No possible moves
       if (openList->getLength() != closedList->getLength() &&
           !currentNode->isEqual(goalNode))
       {
-         // previousNode = new Node(currentNode->getRow(),
-                                 // currentNode->getCol(),
-                                 // currentNode->getDistanceTraveled());
          if (closestNodeInitialised)
          {
             closedList->addElement(&previousNode);
-            // std::cout << "Previous node " << previousNode.getNodeCoordinatesStr() << " added to closed list" << std::endl;
          }
          else
          {
             closedList->addElement(currentNode);
-            // std::cout << "Current node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
          }
-         // delete currentNode;
-         // currentNode = closestNode;
-         // currentNode = new Node(closestNode->getRow(),
-                              //   closestNode->getCol(),
-                              //   closestNode->getDistanceTraveled());
-         // closedList->addElement(previousNode);
-         // std::cout << "Set current node to " << currentNode->getNodeCoordinatesStr() << std::endl;
       }
       // If goal node is found
       else if (openList->getLength() != closedList->getLength() && 
                currentNode->isEqual(goalNode))
       {
-         // Inform user, set it as the current node, add it to the closed list
-         // previousNode = new Node(currentNode->getRow(),
-                                 // currentNode->getCol(),
-                                 // currentNode->getDistanceTraveled());
          std::cout << "Previous node " << previousNode.getNodeCoordinatesStr() << " added to closed list" << std::endl;
          closedList->addElement(&previousNode);
-         // delete currentNode;
-         // currentNode = closestNode;
-         // currentNode = new Node(closestNode->getRow(),
-         //                        closestNode->getCol(),
-         //                        closestNode->getDistanceTraveled());
-         // closedList->addElement(previousNode);
-         // std::cout << "Current node " << currentNode->getNodeCoordinatesStr() << " added to closed list" << std::endl;
          closedList->addElement(currentNode);
-         // delete currentNode;
-         // currentNode = nullptr;
       }
-      // if (openList->getLength() == closedList->getLength() &&
-      //    !currentNode->isEqual(goalNode))
-      // {
-      //    // std::cout << "No possible moves found." << std::endl;
-      //    // print all visited nodes with x
-      //    // std::cout << "Solution not found." << std::endl;
-      //    // printVisitedNodes(env, *closedList, rows, cols);
-      //    printVisitedNodes(env, *openList, rows, cols);
-      // }
 
-
-      // std::cout << "Previous node " << previousNode->getNodeCoordinatesStr() << " added to closedlist" << std::endl;
-      // delete previousNode;
-      // std::cout << "openList length: " << openList->getLength() << std::endl;
-      // std::cout << "closedList length: " << closedList->getLength() << std::endl;
-      // std::cout << "openList = ";
-      // for (int i = 0; i < openList->getLength(); ++i)
-      // {
-         // std::cout << openList->getNode(i)->getNodeCoordinatesStr() << " ";
-      // }
-      // std::cout << std::endl << "closedList = ";
-      // for (int i = 0; i < closedList->getLength(); ++i)
-      // {
-      //    std::cout << closedList->getNode(i)->getNodeCoordinatesStr() << " ";
-      // }
-      // std::cout << std::endl;
-
-      // for (int row = 0; row < rows; row++)
-      // {
-      //    for (int col = 0; col < cols; col++)
-      //    {
-      //       Node* iterationNode = new Node(row, col, 0);
-      //       if (currentNode->isEqual(iterationNode))
-      //       {
-      //          std::cout << "x";
-      //       }
-      //       else
-      //       {
-      //          std::cout << env[row][col]; 
-      //       }
-      //       delete iterationNode;
-      //       iterationNode = nullptr;
-      //    }
-      //    std::cout << std::endl;
-      // }
-      // std::cout << "-------------------" << std::endl;
    }
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());
@@ -462,26 +333,171 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
    if (openList->getLength() == closedList->getLength() &&
       !currentNode->isEqual(goalNode))
    {
-      // std::cout << "No possible moves found." << std::endl;
-      // print all visited nodes with x
-      // std::cout << "Solution not found." << std::endl;
-      // printVisitedNodes(env, *closedList, rows, cols);
-      printVisitedNodes(env, *openList, rows, cols);
+
+      printVisitedNodes(env, *openList, ENV_DIM, ENV_DIM);
    }
 
 
    delete currentNode;
-   // std::cout << std::endl;
-   // printExploredEnv(env, closedList);
-   // delete closestNode;
    delete openList;
    nodesExplored = new NodeList(*closedList); // For milestone 3
    delete closedList;
    delete goalNode;
 }
 
-NodeList* PathSolver::getNodesExplored(){
-   //TODO
+void PathSolver::forwardSearch(Env env, int rows, int cols) {
+   NodeList* openList = new NodeList();
+   NodeList* closedList = new NodeList();
+   Node* currentNode = nullptr;
+   Node* goalNode = nullptr;
+
+   // Scan through environment to find start and goal node locations
+   for (int row = 0; row < rows; ++row)
+   {
+      for (int col = 0; col < cols; ++col)
+      {
+         if (env[row][col] == SYMBOL_START)
+         {
+            Node* tempNode = new Node(row, col, 0);
+            openList->addElement(tempNode);
+            delete tempNode;
+            delete currentNode;
+            currentNode = new Node(*openList->getNode(0));
+         }
+         else if (env[row][col] == SYMBOL_GOAL)
+         {
+            delete goalNode;
+            goalNode = new Node(row, col, 0);
+         }
+      }
+   }
+
+   // Loop through algorithm until goal node is reached (or not reachable)
+   do
+   {
+      Node* tempNode = nullptr;
+      // Add reachable nodes (unexplored non-walls) to the open list
+      // UP
+      if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
+         !openList->containsNode(currentNode->getUpNode(env))) ||
+         currentNode->getUpNode(env).isEqual(goalNode))
+      {
+         tempNode = new Node(currentNode->getUpNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
+      }
+      // DOWN
+      if ((currentNode->getDownChar(env) == SYMBOL_EMPTY &&
+         !openList->containsNode(currentNode->getDownNode(env))) ||
+         currentNode->getDownNode(env).isEqual(goalNode))
+      {
+         tempNode = new Node(currentNode->getDownNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
+      }
+      // LEFT
+      if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY &&
+         !openList->containsNode(currentNode->getLeftNode(env))) ||
+         currentNode->getLeftNode(env).isEqual(goalNode))
+      {
+         tempNode = new Node(currentNode->getLeftNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
+      }
+      // RIGHT
+      if ((currentNode->getRightChar(env) == SYMBOL_EMPTY &&
+         !openList->containsNode(currentNode->getRightNode(env))) ||
+         currentNode->getRightNode(env).isEqual(goalNode))
+      {
+         tempNode = new Node(currentNode->getRightNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
+      }
+      tempNode = nullptr;
+
+      // Set current node to the closest (estimated) node
+      Node previousNode = Node(0,0,0);
+      bool currentNodeMoved = false;
+      for (int i = 0; i < openList->getLength(); ++i)
+      {
+         Node* iterationNode = openList->getNode(i);
+
+         // If the current iteration is a valid position to move to
+         if (!iterationNode->isEqual(currentNode) &&
+             !closedList->containsNode(*iterationNode))
+         {
+            // Move the current node to the first valid node
+            if (!currentNodeMoved)
+            {
+                  previousNode = *currentNode;
+                  delete currentNode;
+                  currentNode = new Node(*iterationNode);
+                  currentNodeMoved = true;
+            }
+            // Move the current node to any nodes that are closer
+            if (iterationNode->getEstimatedDist2Goal(goalNode) <
+                currentNode->getEstimatedDist2Goal(goalNode) &&
+                !iterationNode->isEqual(&previousNode))
+            {
+                  delete currentNode;
+                  currentNode = new Node(*iterationNode);
+            }
+         }
+      }
+
+      // If there are still nodes to be added to the closed list
+      if (openList->getLength() != closedList->getLength() &&
+          !currentNode->isEqual(goalNode))
+      {
+         // The current node has moved to a reachable node
+         if (currentNodeMoved)
+         {
+            closedList->addElement(&previousNode);
+         }
+         // The node has not moved (there are no more reachable nodes)
+         else
+         {
+            closedList->addElement(currentNode);
+         }
+      }
+      // If the goal is reached
+      else if (openList->getLength() != closedList->getLength() && 
+               currentNode->isEqual(goalNode))
+      {
+         // Add both previous and current nodes to closed list
+         // This is done because the while loop will not do another iteration
+         // So we need to add the required nodes to the closed list
+         closedList->addElement(&previousNode);
+         closedList->addElement(currentNode);
+      }
+      
+      // If the goal node cannot be reached (everything has been explored)
+      if (openList->getLength() == closedList->getLength() &&
+         !currentNode->isEqual(goalNode))
+      {
+         // Print all visited nodes with an 'x'
+         printVisitedNodes(env, *closedList, rows, cols);
+      }
+
+   }
+   while (!currentNode->isEqual(goalNode) && 
+          openList->getLength() != closedList->getLength());
+
+   // Deep copy the closed list to nodesExplored
+   this->nodesExplored = new NodeList(*closedList);
+
+   // Free memory
+   delete currentNode;
+   delete openList;
+   delete closedList;
+   delete goalNode;
+   currentNode = nullptr;
+   openList = nullptr;
+   closedList = nullptr;
+   goalNode = nullptr;
+}
+
+NodeList* PathSolver::getNodesExplored() {
    return new NodeList(*nodesExplored);
 }
 
