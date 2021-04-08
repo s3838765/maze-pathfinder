@@ -130,66 +130,159 @@ Env readCustomEnv()
    return env;
 }
 
+// void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
+//    //TODO
+//    // if last node is not goal
+//    Node* finalNode = solution->getNode(solution->getLength()-1);
+//    if (env[finalNode->getRow()][finalNode->getCol()] == SYMBOL_GOAL)
+//    {
+//       for (int row = 0; row < rows; ++row)
+//       {
+//          for (int col = 0; col < cols; ++col)
+//          {
+//             // If the node currently being scanned is within the solution
+//             Node scanningNode = Node(row, col, 0);
+//             bool solutionNode = false;
+//             if (solution->getLength() > 0 &&
+//                 solution->containsNode(scanningNode) && 
+//                 env[row][col] != SYMBOL_GOAL)
+//             {
+//                // check direction of next node and print direction
+//                // and next element is x direction
+//                // If the solution contains the node above the currently scanned node
+//                // and the next node in solution is the node above
+//                Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
+//                Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
+//                if (solution->containsNode(solutionScanningNode->getUpNode(env))
+//                   && solutionScanningNode->getUpNode(env).isEqual(nextNode))
+//                {
+//                   std::cout << "^";
+//                   solutionNode = true;
+//                }
+//                else if (solution->containsNode(solutionScanningNode->getDownNode(env))
+//                         && solutionScanningNode->getDownNode(env).isEqual(nextNode))
+
+//                {
+//                   std::cout << "v";
+//                   solutionNode = true;
+//                }
+//                else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
+//                         && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
+//                {
+//                   std::cout << "<";
+//                   solutionNode = true;
+//                }
+//                else if (solution->containsNode(solutionScanningNode->getRightNode(env))
+//                         && solutionScanningNode->getRightNode(env).isEqual(nextNode))
+//                {
+//                   std::cout << ">";
+//                   solutionNode = true;
+//                }
+//             }
+//             if (solutionNode != true)
+//             {
+//                std::cout << env[row][col];
+//             }
+//          }
+//          // Do not print extra newline at the end of the maze
+//          if (row != rows-1)
+//          {
+//             std::cout << std::endl;
+//          }
+//       }
+//    }
+// }
+
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
    //TODO
    // if last node is not goal
    Node* finalNode = solution->getNode(solution->getLength()-1);
    if (env[finalNode->getRow()][finalNode->getCol()] == SYMBOL_GOAL)
    {
+      for (int i = 0; i < solution->getLength()-1; ++i)
+      {
+         Node solutionNode = *solution->getNode(i);
+         if (solutionNode.getUpNode(env).isEqual(solution->getNextNode(i)))
+         {
+            env[solutionNode.getRow()][solutionNode.getCol()] = '^';
+         }
+         else if (solutionNode.getDownNode(env).isEqual(solution->getNextNode(i)))
+         {
+            env[solutionNode.getRow()][solutionNode.getCol()] = 'v';
+         }
+         else if (solutionNode.getLeftNode(env).isEqual(solution->getNextNode(i)))
+         {
+            env[solutionNode.getRow()][solutionNode.getCol()] = '<';
+         }
+         else if (solutionNode.getRightNode(env).isEqual(solution->getNextNode(i)))
+         {
+            env[solutionNode.getRow()][solutionNode.getCol()] = '>';
+         }
+      }
+
       for (int row = 0; row < rows; ++row)
       {
          for (int col = 0; col < cols; ++col)
          {
-            // If the node currently being scanned is within the solution
-            Node scanningNode = Node(row, col, 0);
-            bool solutionNode = false;
-            if (solution->getLength() > 0 &&
-                solution->containsNode(scanningNode) && 
-                env[row][col] != SYMBOL_GOAL)
-            {
-               // check direction of next node and print direction
-               // and next element is x direction
-               // If the solution contains the node above the currently scanned node
-               // and the next node in solution is the node above
-               Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
-               Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
-               if (solution->containsNode(solutionScanningNode->getUpNode(env))
-                  && solutionScanningNode->getUpNode(env).isEqual(nextNode))
-               {
-                  std::cout << "^";
-                  solutionNode = true;
-               }
-               else if (solution->containsNode(solutionScanningNode->getDownNode(env))
-                        && solutionScanningNode->getDownNode(env).isEqual(nextNode))
-
-               {
-                  std::cout << "v";
-                  solutionNode = true;
-               }
-               else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
-                        && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
-               {
-                  std::cout << "<";
-                  solutionNode = true;
-               }
-               else if (solution->containsNode(solutionScanningNode->getRightNode(env))
-                        && solutionScanningNode->getRightNode(env).isEqual(nextNode))
-               {
-                  std::cout << ">";
-                  solutionNode = true;
-               }
-            }
-            if (solutionNode != true)
-            {
-               std::cout << env[row][col];
-            }
+            std::cout << env[row][col];
          }
-         // Do not print extra newline at the end of the maze
-         if (row != rows-1)
-         {
-            std::cout << std::endl;
-         }
+         std::cout << std::endl;
       }
+
+      // for (int row = 0; row < rows; ++row)
+      // {
+      //    for (int col = 0; col < cols; ++col)
+      //    {
+      //       // If the node currently being scanned is within the solution
+      //       Node scanningNode = Node(row, col, 0);
+      //       bool solutionNode = false;
+      //       if (solution->getLength() > 0 &&
+      //           solution->containsNode(scanningNode) && 
+      //           env[row][col] != SYMBOL_GOAL)
+      //       {
+      //          // check direction of next node and print direction
+      //          // and next element is x direction
+      //          // If the solution contains the node above the currently scanned node
+      //          // and the next node in solution is the node above
+      //          Node* solutionScanningNode = solution->getNodeAtIndex(scanningNode);
+      //          Node* nextNode = solution->getNextNode(solution->getNodeIndex(*solutionScanningNode));
+      //          if (solution->containsNode(solutionScanningNode->getUpNode(env))
+      //             && solutionScanningNode->getUpNode(env).isEqual(nextNode))
+      //          {
+      //             std::cout << "^";
+      //             solutionNode = true;
+      //          }
+      //          else if (solution->containsNode(solutionScanningNode->getDownNode(env))
+      //                   && solutionScanningNode->getDownNode(env).isEqual(nextNode))
+
+      //          {
+      //             std::cout << "v";
+      //             solutionNode = true;
+      //          }
+      //          else if (solution->containsNode(solutionScanningNode->getLeftNode(env))
+      //                   && solutionScanningNode->getLeftNode(env).isEqual(nextNode))
+      //          {
+      //             std::cout << "<";
+      //             solutionNode = true;
+      //          }
+      //          else if (solution->containsNode(solutionScanningNode->getRightNode(env))
+      //                   && solutionScanningNode->getRightNode(env).isEqual(nextNode))
+      //          {
+      //             std::cout << ">";
+      //             solutionNode = true;
+      //          }
+      //       }
+      //       if (solutionNode != true)
+      //       {
+      //          std::cout << env[row][col];
+      //       }
+      //    }
+      //    // Do not print extra newline at the end of the maze
+      //    if (row != rows-1)
+      //    {
+      //       std::cout << std::endl;
+      //    }
+      // }
    }
 }
 
