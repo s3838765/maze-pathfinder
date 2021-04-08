@@ -30,22 +30,20 @@ public:
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
+
+   Node(const Node& other);
+   bool isEqual(Node* node);
+   bool canReach(Node* targetNode, Env env);
+
    char getUpChar(Env env);
    char getDownChar(Env env);
    char getLeftChar(Env env);
    char getRightChar(Env env);
-   std::string getNodeCoordinatesStr();
-   // bool isEqual(Node node);
-   bool isEqual(Node* node);
-   // void getReachableNodes(Env env, NodeList openList);
+
    Node getUpNode(Env env);
    Node getDownNode(Env env);
    Node getLeftNode(Env env);
    Node getRightNode(Env env);
-   bool canReach(Node* targetNode, Env env);
-   // bool isContained(NodeList nodeList); // MAYBE
-   Node(const Node& other);
-
 
 private:
    /*                                           */
