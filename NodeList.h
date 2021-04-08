@@ -30,6 +30,7 @@ public:
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
+
    bool containsNode(Node node);
    Node* getNextNode(int nodeIndex);
 

@@ -1,17 +1,9 @@
-/**
- * Provides method for storing Node objects.
- * Stores array of node objects.
- * Need to track the number of position objects
- */
 #include "NodeList.h"
 #include <iostream>
 
-
-NodeList::NodeList(){
-   // TODO
-
+NodeList::NodeList()
+{
    this->length = 0;
-   // int MAX_DIM = (envRows-2)*(envCols-2);
    this->nodes = new Node*[this->length];
 }
 
@@ -25,62 +17,46 @@ NodeList::~NodeList()
    this->nodes = nullptr;
 }
 
-NodeList::NodeList(NodeList& other){
-   // TODO
+NodeList::NodeList(NodeList& other)
+{
    this->length = other.getLength();
    nodes = new Node*[length];
    for (int i = 0; i < other.getLength(); ++i)
    {
       this->nodes[i] = new Node(*other.getNode(i));
-      // this->nodes[i] = new Node(other.getNode(i)->getRow(), 
-      //                           other.getNode(i)->getCol(), 
-      //                           other.getNode(i)->getDistanceTraveled());
    }
 }
 
-// // Overloaded
-// NodeList::NodeList(NodeList& other, int rows, int cols){
-//    // TODO
-//    this->length = other.getLength();
-//    int MAX_DIM = (cols-2)*(cols-2);
-//    nodes = new Node*[MAX_DIM];
-//    for (int i = 0; i < other.getLength(); ++i)
-//    {
-//       // this->nodes[i] = other.nodes[i];
-//       this->nodes[i] = new Node(other.getNode(i)->getRow(), 
-//                                 other.getNode(i)->getCol(), 
-//                                 other.getNode(i)->getDistanceTraveled());
-//    }
-// }
-
-int NodeList::getLength(){
-   // TODO
+int NodeList::getLength()
+{
    return this->length;
 }
 
-// void NodeList::addElement(Node* newPos)
-// {
-//    nodes[length] = new Node(newPos->getRow(),
-//                             newPos->getCol(),
-//                             newPos->getDistanceTraveled());
-// }
 
-void NodeList::addElement(Node* newPos){
-   // TODO
-   // Create tempList
-   Node** tempList = new Node*[length]; // COPY NODES INTO TEMPLIST
-   // Deep copy values from nodes into tempList
+/**
+ * This implementation of adding an element is inefficient when it comes to
+ * time (as it has to copy an array every time an element is added), but is
+ * memory efficient as it does not store any unused variables. Alternatively,
+ * the array could instead double it's size (rather than adding one). This
+ * would benefit the time complexity, with a small tradeoff for the space
+ * complexity. I have implemented it this way, as this is what I understood
+ * was expected as per the assignment specification.
+ */
+
+// Add a new node to the nodes attribute of NodeList
+// Dynamically resize nodes array to the number of nodes stored inside
+void NodeList::addElement(Node* newPos)
+{
+   // Create a temporary list and deep copy all values of original list into it
+   Node** tempList = new Node*[this->length];
    for (int i = 0; i < this->length; ++i)
    {
-      tempList[i] = new Node(nodes[i]->getRow(),
-                             nodes[i]->getCol(),
-                             nodes[i]->getDistanceTraveled());
+      tempList[i] = new Node(*nodes[i]);
    }
 
-   // Completely delete nodes
-   for (int i = 0; i < length; ++i)
+   // Completely delete all original nodes
+   for (int i = 0; i < this->length; ++i)
    {
-      // std::cout << "Deleting " << this->nodes[i]->getNodeCoordinatesStr() << std::endl;
       delete this->nodes[i];
       this->nodes[i] = nullptr;
    }
@@ -89,7 +65,9 @@ void NodeList::addElement(Node* newPos){
 
    // Create a new nodes array with 1 extra length
    this->nodes = new Node*[length+1];
+
    // Copy the values from tempList to nodes
+   // Simultaneously delete tempList nodes as they are copied
    for (int i = 0; i < this->length; ++i)
    {
       this->nodes[i] = new Node(tempList[i]->getRow(),
@@ -101,25 +79,24 @@ void NodeList::addElement(Node* newPos){
    delete[] tempList;
    tempList = nullptr;
 
-   // Add the new value to nodes
-   nodes[length] = new Node(newPos->getRow(),
-                            newPos->getCol(),
-                            newPos->getDistanceTraveled());
-   // std::cout << "New node added at index " << length << std::endl;
-   // std::cout << "Newest node: " << this->nodes[length]->getNodeCoordinatesStr() << std::endl;
-   // std::cout << std::endl;
+   // Add the new position to the nodes array
+   nodes[length] = new Node(*newPos);
+
+   // Increment the length counter
    length++;
 }
 
-Node* NodeList::getNode(int i){
-   // TODO
+Node* NodeList::getNode(int i)
+{
    return nodes[i];
 }
 
+// Checks if the calling nodelist contains the given node within it
 bool NodeList::containsNode(Node node)
 {
-   bool isContained = false;
    // Search through every element of current NodeList
+   // Check each node and see if it is equal to the passed in node
+   bool isContained = false;
    for (int i = 0; i < this->length; ++i)
    {
       if (this->getNode(i)->isEqual(&node))
@@ -130,6 +107,7 @@ bool NodeList::containsNode(Node node)
    return isContained;
 }
 
+// Returns the node after the given index
 Node* NodeList::getNextNode(int nodeIndex)
 {
    Node* nextNode = nullptr;
