@@ -422,13 +422,13 @@ void PathSolver::forwardSearch(Env env, int rows, int cols) {
       //    std::cout << std::endl;
       // }
 
-
       // std::cout << "-------------------" << std::endl;
    }
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());
 
-   if (openList->getLength() == closedList->getLength())
+   if (openList->getLength() == closedList->getLength() &&
+       !currentNode->isEqual(goalNode))
    {
       // std::cout << "No possible moves found." << std::endl;
       // print all visited nodes with x

@@ -121,10 +121,10 @@ Env readCustomEnv()
       env[row] = new char[*cols];
       for (int col = 0; col < *cols; ++col)
       {
-         std::cout << mazeStr[row*(*cols)+col];
+         // std::cout << mazeStr[row*(*cols)+col];
          env[row][col] = mazeStr[row*(*cols)+col];
       }
-      std::cout << std::endl;
+      // std::cout << std::endl;
    }
    
    return env;
