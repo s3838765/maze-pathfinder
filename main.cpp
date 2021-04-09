@@ -164,6 +164,7 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
          {
             std::cout << env[row][col];
          }
+         // Don't print out newline if it is the last row of the maze
          if (row != rows-1)
          {
             std::cout << std::endl;
