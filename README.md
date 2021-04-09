@@ -1,5 +1,7 @@
 # COSC1076 Assignment 1 - Maze Pathfinder
 
+This is a maze pathfinder that works following a few steps. The maze will first be loaded into the program, and it will then be scanned. The robot can go up, down, left, or right, and for each of these moves it will predict which one is the closest to the goal. It will then move to that particular node and repeat the process until it has reached the goal. Once this is done, these nodes can be backtracked to find the shortest path to the goal. This shortest path is then printed along with the directions taken to get to each location. If the goal node is not reachable after visiting all other possible nodes, the maze will instead be printed with an 'x' in each visited location to indicate exactly where it has been.
+
 ## Tests
 
 ### Edge Cases
