@@ -62,4 +62,5 @@ Thumbs.db
 # Actual.out
 actual.out
 
-Extra_Mazes/
+# Mazes for personal testing (non-edge cases)
+extra_mazes/
