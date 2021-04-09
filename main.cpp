@@ -1,9 +1,15 @@
 /**
- * 1. Reads environment from standard input
- * 2. Execute forward search algorithm
- * 3. Gets the nodes explored in the forward search
- * 4. Gets the full navigation path (milestone 3)
- * 5. Outputs environment with path to standard output (milestone 3)
+ * To implement the pathfinder, I incrementally developed the functionality,
+ * beginning from extremely basic tests, up to more complex tests (as shown
+ * within the tests and in the readme file). This would help me to identify
+ * exactly what the issues were as they happened, rather than looking for
+ * them after attempting a complicated maze.
+ * The biggest issue I had was converting the NodeList attribute nodes to a
+ * dynamic array. At first it seemed it would be a simple task, however, it
+ * seemed to have caused issue after issue within the memory (leaking). This
+ * lead to another issue where I had a single 12 byte leak, and spent two days
+ * trying to fix it. This issue was finally fixed by changing some of the logic
+ * in the code and refactoring. It is now working perfectly with no leaks.
  */
 #include <iostream>
 #include <fstream>
@@ -14,7 +20,6 @@
 #include "Node.h"
 #include "NodeList.h"
 #include "PathSolver.h"
-// #include "milestone4.h"
 
 // Helper test functions
 void testNode();
