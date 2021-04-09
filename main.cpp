@@ -173,52 +173,52 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
    }
 }
 
-// void testNode() {
-//    std::cout << "TESTING Node" << std::endl;
+void testNode() {
+   std::cout << "TESTING Node" << std::endl;
 
-//    // Make a Node and print out the contents
-//    Node* node = new Node(1, 1, 2);
-//    std::cout << node->getRow() << ",";
-//    std::cout << node->getCol() << ",";
-//    std::cout << node->getDistanceTraveled() << std::endl;
-//    delete node;
+   // Make a Node and print out the contents
+   Node* node = new Node(1, 1, 2);
+   std::cout << node->getRow() << ",";
+   std::cout << node->getCol() << ",";
+   std::cout << node->getDistanceTraveled() << std::endl;
+   delete node;
 
-//    // Change Node and print again
-//    node = new Node(4, 2, 3);
-//    std::cout << node->getRow() << ",";
-//    std::cout << node->getCol() << ",";
-//    std::cout << node->getDistanceTraveled() << std::endl;
-//    delete node;
-// }
+   // Change Node and print again
+   node = new Node(4, 2, 3);
+   std::cout << node->getRow() << ",";
+   std::cout << node->getCol() << ",";
+   std::cout << node->getDistanceTraveled() << std::endl;
+   delete node;
+}
 
-// void testNodeList() {
-//    std::cout << "TESTING NodeList" << std::endl;
+void testNodeList() {
+   std::cout << "TESTING NodeList" << std::endl;
 
-//    // Make a simple NodeList, should be empty size
-//    NodeList* nodeList = new NodeList();
-//    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
+   // Make a simple NodeList, should be empty size
+   NodeList* nodeList = new NodeList();
+   std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
 
-//    // Add a Node to the NodeList, print size
-//    Node* b1 = new Node(1, 1, 1);
-//    nodeList->addElement(b1);
-//    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
-//    delete b1;
-//    b1 = nullptr;
+   // Add a Node to the NodeList, print size
+   Node* b1 = new Node(1, 1, 1);
+   nodeList->addElement(b1);
+   std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
+   delete b1;
+   b1 = nullptr;
 
-//    // Add second Nodetest
-//    Node* b2 = new Node(0, 0, 1);
-//    nodeList->addElement(b2);
-//    std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
-//    delete b2;
-//    b2 = nullptr;
+   // Add second Nodetest
+   Node* b2 = new Node(0, 0, 1);
+   nodeList->addElement(b2);
+   std::cout << "NodeList size: " << nodeList->getLength() << std::endl;
+   delete b2;
+   b2 = nullptr;
 
-//    // Test Get-ith - should be 0,0,1
-//    Node* getB = nodeList->getNode(1);
-//    std::cout << getB->getRow() << ",";
-//    std::cout << getB->getCol() << ",";
-//    std::cout << getB->getDistanceTraveled() << std::endl;
-//    delete nodeList;
+   // Test Get-ith - should be 0,0,1
+   Node* getB = nodeList->getNode(1);
+   std::cout << getB->getRow() << ",";
+   std::cout << getB->getCol() << ",";
+   std::cout << getB->getDistanceTraveled() << std::endl;
+   delete nodeList;
 
-//    // Print out the NodeList
-//    std::cout << "PRINTING OUT A NODELIST IS AN EXERCISE FOR YOU TO DO" << std::endl;
-// }
+   // Print out the NodeList
+   std::cout << "PRINTING OUT A NODELIST IS AN EXERCISE FOR YOU TO DO" << std::endl;
+}
