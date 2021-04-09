@@ -40,8 +40,8 @@ void printEnv(Env env);
 // To be implemented for Milestone 3
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols);
 
-int* envCols = new int(0);
-int* envRows = new int(0);
+static int* envCols = new int(0);
+static int* envRows = new int(0);
 
 int main(int argc, char** argv){
    // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE

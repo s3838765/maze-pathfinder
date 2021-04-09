@@ -382,6 +382,9 @@ void PathSolver::printVisitedNodes(Env env, NodeList visitedList, int rows,
             std::cout << env[row][col];
          }
       }
-      std::cout << std::endl;
+      if (row != rows-1)
+      {
+         std::cout << std::endl;
+      }
    }
 }
