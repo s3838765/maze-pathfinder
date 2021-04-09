@@ -6,7 +6,7 @@
 
 The following edge cases are organised in order of testing. They begin extremely simple and gradually become slightly more complex, testing various functionalities.
 
-[**1.narrow-path.env**](tests/edge_cases/1.narrow_path.env): The simplest test, the pathfinder will simply need to travel in a line straight down. This tests that it will converge to the goal, and also tests it's behaviour upon reaching the goal (e.g. if it actually travels to the goal or stops before it). <br>
+[**1.narrow-path.env**](tests/edge_cases/1.narrow-path.env): The simplest test, the pathfinder will simply need to travel in a line straight down. This tests that it will converge to the goal, and also tests it's behaviour upon reaching the goal (e.g. if it actually travels to the goal or stops before it). <br>
 [**2.one-way-square.env**](tests/edge_cases/2.one-way-square.env): Similar to narrow-path.env, but contains turns to test movement in all directions. <br>
 [**3.cross.env**](tests/edge_cases/3.cross.env): Primarily used to test adding multiple nodes to the open list, and moving in the correct direction. <br>
 [**4.F.env**](tests/edge_cases/4.F.env): The first maze to contain multiple paths, tests that the pathfinder is actually able to navigate the open list properly. <br>
