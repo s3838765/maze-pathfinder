@@ -269,29 +269,31 @@ void PathSolver::forwardSearch(Env env, int rows, int cols)
       }
 
       // If there are still nodes to be added to the closed list
-      if (openList->getLength() != closedList->getLength() &&
-          !currentNode->isEqual(goalNode))
+      if (openList->getLength() != closedList->getLength())
       {
-         // The current node has moved to a reachable node
-         if (currentNodeMoved)
+         // If the goal node is not reached
+         if (!currentNode->isEqual(goalNode))
          {
-            closedList->addElement(&previousNode);
+            // If the current node has moved to a reachable node
+            if (currentNodeMoved)
+            {
+               closedList->addElement(&previousNode);
+            }
+            // If the node has not moved (there are no more reachable nodes)
+            else
+            {
+               closedList->addElement(currentNode);
+            }
          }
-         // The node has not moved (there are no more reachable nodes)
+         // If the goal is reached
          else
          {
+            // Add both previous and current nodes to closed list
+            // This is done because the while loop will not do another iteration
+            // So we need to add the required nodes to the closed list
+            closedList->addElement(&previousNode);
             closedList->addElement(currentNode);
          }
-      }
-      // If the goal is reached
-      else if (openList->getLength() != closedList->getLength() && 
-               currentNode->isEqual(goalNode))
-      {
-         // Add both previous and current nodes to closed list
-         // This is done because the while loop will not do another iteration
-         // So we need to add the required nodes to the closed list
-         closedList->addElement(&previousNode);
-         closedList->addElement(currentNode);
       }
       
       // If the goal node cannot be reached (everything has been explored)
@@ -301,7 +303,6 @@ void PathSolver::forwardSearch(Env env, int rows, int cols)
          // Print all visited nodes with an 'x'
          printVisitedNodes(env, *closedList, rows, cols);
       }
-
    }
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());
