@@ -25,9 +25,10 @@ void PathSolver::forwardSearch(Env env)
       {
          if (env[row][col] == SYMBOL_START)
          {
-            Node* tempNode = new Node(row, col, 0);
-            openList->addElement(tempNode);
-            delete tempNode;
+            // Node* tempNode = new Node(row, col, 0);
+            // openList->addElement(tempNode);
+            openList->addElement(new Node(row, col, 0));
+            // delete tempNode;
             delete currentNode;
             currentNode = new Node(*openList->getNode(0));
          }
@@ -42,45 +43,49 @@ void PathSolver::forwardSearch(Env env)
    // Loop through algorithm until goal node is reached (or not reachable)
    do
    {
-      Node* tempNode = nullptr;
+      // Node* tempNode = nullptr;
       // Add reachable nodes (unexplored non-walls) to the open list
       // UP
       if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getUpNode(env))) ||
           currentNode->getUpNode(env).isEqual(goalNode))
       {
-         tempNode = new Node(currentNode->getUpNode(env));
-         openList->addElement(tempNode);
-         delete tempNode;
+         // tempNode = new Node(currentNode->getUpNode(env));
+         // openList->addElement(tempNode);
+         openList->addElement(new Node(currentNode->getUpNode(env)));
+         // delete tempNode;
       }
       // DOWN
       if ((currentNode->getDownChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getDownNode(env))) ||
           currentNode->getDownNode(env).isEqual(goalNode))
       {
-         tempNode = new Node(currentNode->getDownNode(env));
-         openList->addElement(tempNode);
-         delete tempNode;
+         // tempNode = new Node(currentNode->getDownNode(env));
+         // openList->addElement(tempNode);
+         openList->addElement(new Node(currentNode->getDownNode(env)));
+         // delete tempNode;
       }
       // LEFT
       if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getLeftNode(env))) ||
           currentNode->getLeftNode(env).isEqual(goalNode))
       {
-         tempNode = new Node(currentNode->getLeftNode(env));
-         openList->addElement(tempNode);
-         delete tempNode;
+         // tempNode = new Node(currentNode->getLeftNode(env));
+         // openList->addElement(tempNode);
+         openList->addElement(new Node(currentNode->getLeftNode(env)));
+         // delete tempNode;
       }
       // RIGHT
       if ((currentNode->getRightChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getRightNode(env))) ||
           currentNode->getRightNode(env).isEqual(goalNode))
       {
-         tempNode = new Node(currentNode->getRightNode(env));
-         openList->addElement(tempNode);
-         delete tempNode;
+         // tempNode = new Node(currentNode->getRightNode(env));
+         // openList->addElement(tempNode);
+         openList->addElement(new Node(currentNode->getRightNode(env)));
+         // delete tempNode;
       }
-      tempNode = nullptr;
+      // tempNode = nullptr;
 
       // Set current node to the closest (estimated) node
       Node previousNode = Node(0,0,0);
@@ -179,15 +184,11 @@ void PathSolver::forwardSearch(Env env, int rows, int cols)
       {
          if (env[row][col] == SYMBOL_START)
          {
-            Node* tempNode = new Node(row, col, 0);
-            openList->addElement(tempNode);
-            delete tempNode;
-            delete currentNode;
-            currentNode = new Node(*openList->getNode(0));
+            currentNode = new Node(row, col, 0);
+            openList->addElement(currentNode);
          }
          else if (env[row][col] == SYMBOL_GOAL)
          {
-            delete goalNode;
             goalNode = new Node(row, col, 0);
          }
       }
@@ -196,8 +197,9 @@ void PathSolver::forwardSearch(Env env, int rows, int cols)
    // Loop through algorithm until goal node is reached (or not reachable)
    do
    {
-      Node* tempNode = nullptr;
       // Add reachable nodes (unexplored non-walls) to the open list
+      // Temp nodes are used to add nodes to the open list without causing leaks
+      Node* tempNode = nullptr;
       // UP
       if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getUpNode(env))) ||
