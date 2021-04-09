@@ -1,5 +1,0 @@
-#ifndef MILESTONE4_H
-#define MILESTONE4_H
-
-
-#endif //MILESTONE4_H
