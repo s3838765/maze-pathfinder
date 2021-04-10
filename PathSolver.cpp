@@ -25,16 +25,11 @@ void PathSolver::forwardSearch(Env env)
       {
          if (env[row][col] == SYMBOL_START)
          {
-            // Node* tempNode = new Node(row, col, 0);
-            // openList->addElement(tempNode);
-            openList->addElement(new Node(row, col, 0));
-            // delete tempNode;
-            delete currentNode;
-            currentNode = new Node(*openList->getNode(0));
+            currentNode = new Node(row, col, 0);
+            openList->addElement(currentNode);
          }
          else if (env[row][col] == SYMBOL_GOAL)
          {
-            delete goalNode;
             goalNode = new Node(row, col, 0);
          }
       }
@@ -43,49 +38,46 @@ void PathSolver::forwardSearch(Env env)
    // Loop through algorithm until goal node is reached (or not reachable)
    do
    {
-      // Node* tempNode = nullptr;
       // Add reachable nodes (unexplored non-walls) to the open list
+      // Temp nodes are used to add nodes to the open list without causing leaks
+      Node* tempNode = nullptr;
       // UP
       if ((currentNode->getUpChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getUpNode(env))) ||
           currentNode->getUpNode(env).isEqual(goalNode))
       {
-         // tempNode = new Node(currentNode->getUpNode(env));
-         // openList->addElement(tempNode);
-         openList->addElement(new Node(currentNode->getUpNode(env)));
-         // delete tempNode;
+         tempNode = new Node(currentNode->getUpNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
       }
       // DOWN
       if ((currentNode->getDownChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getDownNode(env))) ||
           currentNode->getDownNode(env).isEqual(goalNode))
       {
-         // tempNode = new Node(currentNode->getDownNode(env));
-         // openList->addElement(tempNode);
-         openList->addElement(new Node(currentNode->getDownNode(env)));
-         // delete tempNode;
+         tempNode = new Node(currentNode->getDownNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
       }
       // LEFT
       if ((currentNode->getLeftChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getLeftNode(env))) ||
           currentNode->getLeftNode(env).isEqual(goalNode))
       {
-         // tempNode = new Node(currentNode->getLeftNode(env));
-         // openList->addElement(tempNode);
-         openList->addElement(new Node(currentNode->getLeftNode(env)));
-         // delete tempNode;
+         tempNode = new Node(currentNode->getLeftNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
       }
       // RIGHT
       if ((currentNode->getRightChar(env) == SYMBOL_EMPTY &&
           !openList->containsNode(currentNode->getRightNode(env))) ||
           currentNode->getRightNode(env).isEqual(goalNode))
       {
-         // tempNode = new Node(currentNode->getRightNode(env));
-         // openList->addElement(tempNode);
-         openList->addElement(new Node(currentNode->getRightNode(env)));
-         // delete tempNode;
+         tempNode = new Node(currentNode->getRightNode(env));
+         openList->addElement(tempNode);
+         delete tempNode;
       }
-      // tempNode = nullptr;
+      tempNode = nullptr;
 
       // Set current node to the closest (estimated) node
       Node previousNode = Node(0,0,0);
@@ -118,29 +110,31 @@ void PathSolver::forwardSearch(Env env)
       }
 
       // If there are still nodes to be added to the closed list
-      if (openList->getLength() != closedList->getLength() &&
-          !currentNode->isEqual(goalNode))
+      if (openList->getLength() != closedList->getLength())
       {
-         // The current node has moved to a reachable node
-         if (currentNodeMoved)
+         // If the goal node is not reached
+         if (!currentNode->isEqual(goalNode))
          {
-            closedList->addElement(&previousNode);
+            // If the current node has moved to a reachable node
+            if (currentNodeMoved)
+            {
+               closedList->addElement(&previousNode);
+            }
+            // If the node has not moved (there are no more reachable nodes)
+            else
+            {
+               closedList->addElement(currentNode);
+            }
          }
-         // The node has not moved (there are no more reachable nodes)
+         // If the goal is reached
          else
          {
+            // Add both previous and current nodes to closed list
+            // This is done because the while loop will not do another iteration
+            // So we need to add the required nodes to the closed list
+            closedList->addElement(&previousNode);
             closedList->addElement(currentNode);
          }
-      }
-      // If the goal is reached
-      else if (openList->getLength() != closedList->getLength() && 
-               currentNode->isEqual(goalNode))
-      {
-         // Add both previous and current nodes to closed list
-         // This is done because the while loop will not do another iteration
-         // So we need to add the required nodes to the closed list
-         closedList->addElement(&previousNode);
-         closedList->addElement(currentNode);
       }
       
       // If the goal node cannot be reached (everything has been explored)
@@ -150,7 +144,6 @@ void PathSolver::forwardSearch(Env env)
          // Print all visited nodes with an 'x'
          printVisitedNodes(env, *closedList, ENV_DIM, ENV_DIM);
       }
-
    }
    while (!currentNode->isEqual(goalNode) && 
           openList->getLength() != closedList->getLength());

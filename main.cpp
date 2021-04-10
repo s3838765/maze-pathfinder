@@ -82,10 +82,17 @@ int main(int argc, char** argv){
    for (int i = 0; i < *envRows; ++i)
    {
       delete[] env[i];
+      env[i] = nullptr;
    }
    delete[] env;
    delete envRows;
    delete envCols;
+   pathSolver = nullptr;
+   exploredPositions = nullptr;
+   solution = nullptr;
+   env = nullptr;
+   envRows = nullptr;
+   envCols = nullptr;
 }
 
 // Read environment input of any size
