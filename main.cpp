@@ -20,6 +20,7 @@
 #include "Node.h"
 #include "NodeList.h"
 #include "PathSolver.h"
+#include "milestone4.h"
 
 // Helper test functions
 void testNode();
@@ -79,12 +80,7 @@ int main(int argc, char** argv){
    delete pathSolver;
    delete exploredPositions;
    delete solution;
-   for (int i = 0; i < *envRows; ++i)
-   {
-      delete[] env[i];
-      env[i] = nullptr;
-   }
-   delete[] env;
+   delete_env(env, *envRows, *envCols);
    delete envRows;
    delete envCols;
    pathSolver = nullptr;
@@ -95,11 +91,23 @@ int main(int argc, char** argv){
    envCols = nullptr;
 }
 
+// Original environment read function, still works assuming the env is 20x20
+void readEnvStdin(Env env) {
+   for (int row = 0; row < ENV_DIM; ++row)
+   {
+      for (int col = 0; col < ENV_DIM; ++col)
+      {
+         // Store this position in list
+         std::cin >> env[row][col];
+      }
+   }
+}
+
 // Read environment input of any size
 Env readCustomEnv()
 {
-   int* cols = envCols;
-   int* rows = envRows;
+   // int* cols = envCols;
+   // int* rows = envRows;
    std::string mazeStr;
 
    bool colsDefined = false;
@@ -114,27 +122,19 @@ Env readCustomEnv()
       // Define the number of columns in the maze (using the first row inputted)
       if (!colsDefined)
       {
-         *cols = mazeStr.length();
+         *envCols = mazeStr.length();
          colsDefined = true;
       }
-      (*rows)++;
+      (*envRows)++;
    } 
    while (std::cin.peek() != EOF);
 
    // Create environment based on number of rows
-   Env env = new char*[*rows];
-   for (int row = 0; row < *rows; ++row)
-   {
-      // Create a new character array for every row
-      env[row] = new char[*cols];
-      for (int col = 0; col < *cols; ++col)
-      {
-         // Use mazeStr to set the characters within the env array
-         env[row][col] = mazeStr[row*(*cols)+col];
-      }
-   }
+   Env env = make_env(*envRows, *envCols);
+   env = populate_env(env, mazeStr, *envRows, *envCols);
    return env;
 }
+
 
 // Prints given maze with the solution, including directional arrows
 void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
@@ -150,22 +150,22 @@ void printEnvStdout(Env env, NodeList* solution, int rows, int cols) {
          Node solutionNode = *solution->getNode(i);
          if (solutionNode.getUpNode(env).isEqual(solution->getNextNode(i)))
          {
-            env[solutionNode.getRow()][solutionNode.getCol()] = '^';
+            env[solutionNode.getRow()][solutionNode.getCol()] = SYMBOL_UP;
          }
          else if (solutionNode.getDownNode(env).isEqual(solution->
                                                                getNextNode(i)))
          {
-            env[solutionNode.getRow()][solutionNode.getCol()] = 'v';
+            env[solutionNode.getRow()][solutionNode.getCol()] = SYMBOL_DOWN;
          }
          else if (solutionNode.getLeftNode(env).isEqual(solution->
                                                                getNextNode(i)))
          {
-            env[solutionNode.getRow()][solutionNode.getCol()] = '<';
+            env[solutionNode.getRow()][solutionNode.getCol()] = SYMBOL_LEFT;
          }
          else if (solutionNode.getRightNode(env).isEqual(solution->
                                                                getNextNode(i)))
          {
-            env[solutionNode.getRow()][solutionNode.getCol()] = '>';
+            env[solutionNode.getRow()][solutionNode.getCol()] = SYMBOL_RIGHT;
          }
       }
 
